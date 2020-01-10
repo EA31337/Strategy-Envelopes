@@ -6,129 +6,121 @@
 
 /**
  * @file
- * Implements Envelopes strategy.
+ * Implements Envelopes strategy the Envelopes indicator.
  */
 
 // Includes.
-#include "../../EA31337-classes/Indicators/Indi_Envelopes.mqh"
-#include "../../EA31337-classes/Strategy.mqh"
+#include <EA31337-classes/Indicators/Indi_Envelopes.mqh>
+#include <EA31337-classes/Strategy.mqh>
 
 // User input params.
-INPUT string __Envelopes_Parameters__ = "-- Settings for the Envelopes indicator --";  // >>> ENVELOPES <<<
-INPUT uint Envelopes_Active_Tf = 4;            // Activate timeframes (1-255, e.g. M1=1,M5=2,M15=4,M30=8,H1=16,H2=32...)
-INPUT int Envelopes_MA_Period_M1 = 6;          // Period for M1
-INPUT int Envelopes_MA_Period_M5 = 6;          // Period for M5
-INPUT int Envelopes_MA_Period_M15 = 22;        // Period for M15
-INPUT int Envelopes_MA_Period_M30 = 6;         // Period for M30
-INPUT double Envelopes_Deviation_M1 = 0.5;     // Deviation for M1
-INPUT double Envelopes_Deviation_M5 = 0.6;     // Deviation for M5
-INPUT double Envelopes_Deviation_M15 = 0.2;    // Deviation for M15
-INPUT double Envelopes_Deviation_M30 = 0.3;    // Deviation for M30
+INPUT string __Envelopes_Parameters__ = "-- Envelopes strategy params --";  // >>> ENVELOPES <<<
+INPUT int Envelopes_Active_Tf = 4;             // Activate timeframes (1-255, e.g. M1=1,M5=2,M15=4,M30=8,H1=16,H2=32...)
+INPUT int Envelopes_MA_Period = 6;             // Period
+INPUT double Envelopes_Deviation = 0.5;        // Deviation for M1
 INPUT ENUM_MA_METHOD Envelopes_MA_Method = 3;  // MA Method
 INPUT int Envelopes_MA_Shift = 0;              // MA Shift
 INPUT ENUM_APPLIED_PRICE Envelopes_Applied_Price = 3;       // Applied Price
 INPUT int Envelopes_Shift = 0;                              // Shift
 INPUT ENUM_TRAIL_TYPE Envelopes_TrailingStopMethod = 23;    // Trail stop method
 INPUT ENUM_TRAIL_TYPE Envelopes_TrailingProfitMethod = -2;  // Trail profit method
-/* @todo INPUT */ int Envelopes_SignalLevel = 0;            // Signal level
-INPUT int Envelopes1_SignalMethod = 48;                     // Signal method for M1 (-127-127)
-INPUT int Envelopes5_SignalMethod = 97;                     // Signal method for M5 (-127-127)
-INPUT int Envelopes15_SignalMethod = 1;                     // Signal method for M15 (-127-127)
-INPUT int Envelopes30_SignalMethod = 127;                   // Signal method for M30 (-127-127)
-INPUT int Envelopes1_OpenCondition1 = 1;                    // Open condition 1 for M1 (0-1023)
-INPUT int Envelopes1_OpenCondition2 = 0;                    // Open condition 2 for M1 (0-1023)
+/* @todo INPUT */ int Envelopes_SignalOpenLevel = 0;        // Signal open level
+INPUT int Envelopes1_SignalBaseMethod = 48;                 // Signal base method (-127-127)
+INPUT int Envelopes1_OpenCondition1 = 1;                    // Open condition 1 (0-1023)
+INPUT int Envelopes1_OpenCondition2 = 0;                    // Open condition 2 (0-1023)
 INPUT ENUM_MARKET_EVENT Envelopes1_CloseCondition = 13;     // Close condition for M1
-//
-INPUT int Envelopes5_OpenCondition1 = 1;                // Open condition 1 for M5 (0-1023)
-INPUT int Envelopes5_OpenCondition2 = 0;                // Open condition 2 for M5 (0-1023)
-INPUT ENUM_MARKET_EVENT Envelopes5_CloseCondition = 7;  // Close condition for M5
-//
-INPUT int Envelopes15_OpenCondition1 = 292;               // Open condition 1 for M15 (0-1023)
-INPUT int Envelopes15_OpenCondition2 = 0;                 // Open condition 2 for M15 (0-1023)
-INPUT ENUM_MARKET_EVENT Envelopes15_CloseCondition = 29;  // Close condition for M15
-//
-INPUT int Envelopes30_OpenCondition1 = 292;               // Open condition 1 for M30 (0-1023)
-INPUT int Envelopes30_OpenCondition2 = 0;                 // Open condition 2 for M30 (0-1023)
-INPUT ENUM_MARKET_EVENT Envelopes30_CloseCondition = 29;  // Close condition for M30
-//
-INPUT double Envelopes1_MaxSpread = 6.0;    // Max spread to trade for M1 (pips)
-INPUT double Envelopes5_MaxSpread = 7.0;    // Max spread to trade for M5 (pips)
-INPUT double Envelopes15_MaxSpread = 8.0;   // Max spread to trade for M15 (pips)
-INPUT double Envelopes30_MaxSpread = 10.0;  // Max spread to trade for M30 (pips)
+INPUT double Envelopes_MaxSpread = 6.0;                     // Max spread to trade (pips)
+
+// Struct to define strategy parameters to override.
+struct Stg_Envelopes_Params : Stg_Params {
+  unsigned int Envelopes_Period;
+  ENUM_APPLIED_PRICE Envelopes_Applied_Price;
+  int Envelopes_Shift;
+  ENUM_TRAIL_TYPE Envelopes_TrailingStopMethod;
+  ENUM_TRAIL_TYPE Envelopes_TrailingProfitMethod;
+  double Envelopes_SignalOpenLevel;
+  long Envelopes_SignalBaseMethod;
+  long Envelopes_SignalOpenMethod1;
+  long Envelopes_SignalOpenMethod2;
+  double Envelopes_SignalCloseLevel;
+  ENUM_MARKET_EVENT Envelopes_SignalCloseMethod1;
+  ENUM_MARKET_EVENT Envelopes_SignalCloseMethod2;
+  double Envelopes_MaxSpread;
+
+  // Constructor: Set default param values.
+  Stg_Envelopes_Params()
+      : Envelopes_Period(::Envelopes_Period),
+        Envelopes_Applied_Price(::Envelopes_Applied_Price),
+        Envelopes_Shift(::Envelopes_Shift),
+        Envelopes_TrailingStopMethod(::Envelopes_TrailingStopMethod),
+        Envelopes_TrailingProfitMethod(::Envelopes_TrailingProfitMethod),
+        Envelopes_SignalOpenLevel(::Envelopes_SignalOpenLevel),
+        Envelopes_SignalBaseMethod(::Envelopes_SignalBaseMethod),
+        Envelopes_SignalOpenMethod1(::Envelopes_SignalOpenMethod1),
+        Envelopes_SignalOpenMethod2(::Envelopes_SignalOpenMethod2),
+        Envelopes_SignalCloseLevel(::Envelopes_SignalCloseLevel),
+        Envelopes_SignalCloseMethod1(::Envelopes_SignalCloseMethod1),
+        Envelopes_SignalCloseMethod2(::Envelopes_SignalCloseMethod2),
+        Envelopes_MaxSpread(::Envelopes_MaxSpread) {}
+};
+
+// Loads pair specific param values.
+#include "sets/EURUSD_H1.h"
+#include "sets/EURUSD_H4.h"
+#include "sets/EURUSD_M1.h"
+#include "sets/EURUSD_M15.h"
+#include "sets/EURUSD_M30.h"
+#include "sets/EURUSD_M5.h"
 
 class Stg_Envelopes : public Strategy {
  public:
   Stg_Envelopes(StgParams &_params, string _name) : Strategy(_params, _name) {}
 
-  static Stg_Envelopes *Init_M1() {
-    ChartParams cparams1(PERIOD_M1);
-    IndicatorParams env_iparams(10, INDI_ENVELOPES);
-    Envelopes_Params env1_iparams(Envelopes_MA_Period_M1, Envelopes_MA_Shift, Envelopes_MA_Method,
-                                  Envelopes_Applied_Price, Envelopes_Deviation_M1);
-    StgParams env1_sparams(new Trade(PERIOD_M1, _Symbol), new Indi_Envelopes(env1_iparams, env_iparams, cparams1), NULL,
-                           NULL);
-    env1_sparams.SetSignals(Envelopes1_SignalMethod, Envelopes1_OpenCondition1, Envelopes1_OpenCondition2,
-                            Envelopes1_CloseCondition, NULL, Envelopes_SignalLevel, NULL);
-    env1_sparams.SetStops(Envelopes_TrailingProfitMethod, Envelopes_TrailingStopMethod);
-    env1_sparams.SetMaxSpread(Envelopes1_MaxSpread);
-    env1_sparams.SetId(ENVELOPES1);
-    return (new Stg_Envelopes(env1_sparams, "Envelopes1"));
-  }
-  static Stg_Envelopes *Init_M5() {
-    ChartParams cparams5(PERIOD_M5);
-    IndicatorParams env_iparams(10, INDI_ENVELOPES);
-    Envelopes_Params env5_iparams(Envelopes_MA_Period_M5, Envelopes_MA_Shift, Envelopes_MA_Method,
-                                  Envelopes_Applied_Price, Envelopes_Deviation_M5);
-    StgParams env5_sparams(new Trade(PERIOD_M5, _Symbol), new Indi_Envelopes(env5_iparams, env_iparams, cparams5), NULL,
-                           NULL);
-    env5_sparams.SetSignals(Envelopes5_SignalMethod, Envelopes5_OpenCondition1, Envelopes5_OpenCondition2,
-                            Envelopes5_CloseCondition, NULL, Envelopes_SignalLevel, NULL);
-    env5_sparams.SetStops(Envelopes_TrailingProfitMethod, Envelopes_TrailingStopMethod);
-    env5_sparams.SetMaxSpread(Envelopes5_MaxSpread);
-    env5_sparams.SetId(ENVELOPES5);
-    return (new Stg_Envelopes(env5_sparams, "Envelopes5"));
-  }
-  static Stg_Envelopes *Init_M15() {
-    ChartParams cparams15(PERIOD_M15);
-    IndicatorParams env_iparams(10, INDI_ENVELOPES);
-    Envelopes_Params env15_iparams(Envelopes_MA_Period_M15, Envelopes_MA_Shift, Envelopes_MA_Method,
-                                   Envelopes_Applied_Price, Envelopes_Deviation_M15);
-    StgParams env15_sparams(new Trade(PERIOD_M15, _Symbol), new Indi_Envelopes(env15_iparams, env_iparams, cparams15),
-                            NULL, NULL);
-    env15_sparams.SetSignals(Envelopes15_SignalMethod, Envelopes15_OpenCondition1, Envelopes15_OpenCondition2,
-                             Envelopes15_CloseCondition, NULL, Envelopes_SignalLevel, NULL);
-    env15_sparams.SetStops(Envelopes_TrailingProfitMethod, Envelopes_TrailingStopMethod);
-    env15_sparams.SetMaxSpread(Envelopes15_MaxSpread);
-    env15_sparams.SetId(ENVELOPES15);
-    return (new Stg_Envelopes(env15_sparams, "Envelopes15"));
-  }
-  static Stg_Envelopes *Init_M30() {
-    ChartParams cparams30(PERIOD_M30);
-    IndicatorParams env_iparams(10, INDI_ENVELOPES);
-    Envelopes_Params env30_iparams(Envelopes_MA_Period_M30, Envelopes_MA_Shift, Envelopes_MA_Method,
-                                   Envelopes_Applied_Price, Envelopes_Deviation_M30);
-    StgParams env30_sparams(new Trade(PERIOD_M30, _Symbol), new Indi_Envelopes(env30_iparams, env_iparams, cparams30),
-                            NULL, NULL);
-    env30_sparams.SetSignals(Envelopes30_SignalMethod, Envelopes30_OpenCondition1, Envelopes30_OpenCondition2,
-                             Envelopes30_CloseCondition, NULL, Envelopes_SignalLevel, NULL);
-    env30_sparams.SetStops(Envelopes_TrailingProfitMethod, Envelopes_TrailingStopMethod);
-    env30_sparams.SetMaxSpread(Envelopes30_MaxSpread);
-    env30_sparams.SetId(ENVELOPES30);
-    return (new Stg_Envelopes(env30_sparams, "Envelopes30"));
-  }
-  static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf) {
+  static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
+    // Initialize strategy initial values.
+    Stg_Envelopes_Params _params;
     switch (_tf) {
-      case PERIOD_M1:
-        return Init_M1();
-      case PERIOD_M5:
-        return Init_M5();
-      case PERIOD_M15:
-        return Init_M15();
-      case PERIOD_M30:
-        return Init_M30();
-      default:
-        return NULL;
+      case PERIOD_M1: {
+        Stg_Envelopes_EURUSD_M1_Params _new_params;
+        _params = _new_params;
+      }
+      case PERIOD_M5: {
+        Stg_Envelopes_EURUSD_M5_Params _new_params;
+        _params = _new_params;
+      }
+      case PERIOD_M15: {
+        Stg_Envelopes_EURUSD_M15_Params _new_params;
+        _params = _new_params;
+      }
+      case PERIOD_M30: {
+        Stg_Envelopes_EURUSD_M30_Params _new_params;
+        _params = _new_params;
+      }
+      case PERIOD_H1: {
+        Stg_Envelopes_EURUSD_H1_Params _new_params;
+        _params = _new_params;
+      }
+      case PERIOD_H4: {
+        Stg_Envelopes_EURUSD_H4_Params _new_params;
+        _params = _new_params;
+      }
     }
+    // Initialize strategy parameters.
+    ChartParams cparams(_tf);
+    Envelopes_Params adx_params(_params.Envelopes_Period, _params.Envelopes_Applied_Price);
+    IndicatorParams adx_iparams(10, INDI_Envelopes);
+    StgParams sparams(new Trade(_tf, _Symbol), new Indi_Envelopes(adx_params, adx_iparams, cparams), NULL, NULL);
+    sparams.logger.SetLevel(_log_level);
+    sparams.SetMagicNo(_magic_no);
+    sparams.SetSignals(_params.Envelopes_SignalBaseMethod, _params.Envelopes_SignalOpenMethod1,
+                       _params.Envelopes_SignalOpenMethod2, _params.Envelopes_SignalCloseMethod1,
+                       _params.Envelopes_SignalCloseMethod2, _params.Envelopes_SignalOpenLevel,
+                       _params.Envelopes_SignalCloseLevel);
+    sparams.SetStops(_params.Envelopes_TrailingProfitMethod, _params.Envelopes_TrailingStopMethod);
+    sparams.SetMaxSpread(_params.Envelopes_MaxSpread);
+    // Initialize strategy instance.
+    Strategy *_strat = new Stg_Envelopes(sparams, "Envelopes");
+    return _strat;
   }
 
   /**
@@ -188,5 +180,13 @@ class Stg_Envelopes : public Strategy {
         break;
     }
     return _result;
+  }
+
+  /**
+   * Check strategy's closing signal.
+   */
+  bool SignalClose(ENUM_ORDER_TYPE _cmd, long _signal_method = EMPTY, double _signal_level = EMPTY) {
+    if (_signal_level == EMPTY) _signal_level = GetSignalCloseLevel();
+    return SignalOpen(Order::NegateOrderType(_cmd), _signal_method, _signal_level);
   }
 };
