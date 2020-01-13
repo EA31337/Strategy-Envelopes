@@ -12,15 +12,12 @@ struct Stg_Envelopes_EURUSD_M1_Params : Stg_Envelopes_Params {
     Envelopes_Period = 32;
     Envelopes_Applied_Price = 3;
     Envelopes_Shift = 0;
-    Envelopes_TrailingStopMethod = 6;
-    Envelopes_TrailingProfitMethod = 11;
+    Envelopes_SignalOpenMethod = 0;
     Envelopes_SignalOpenLevel = 36;
-    Envelopes_SignalBaseMethod = 0;
-    Envelopes_SignalOpenMethod1 = 0;
-    Envelopes_SignalOpenMethod2 = 0;
+    Envelopes_SignalCloseMethod = 0;
     Envelopes_SignalCloseLevel = 36;
-    Envelopes_SignalCloseMethod1 = 0;
-    Envelopes_SignalCloseMethod2 = 0;
+    Envelopes_PriceLimitMethod = 0;
+    Envelopes_PriceLimitLevel = 0;
     Envelopes_MaxSpread = 2;
   }
 };

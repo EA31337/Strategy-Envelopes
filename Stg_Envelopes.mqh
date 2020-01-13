@@ -15,36 +15,31 @@
 
 // User input params.
 INPUT string __Envelopes_Parameters__ = "-- Envelopes strategy params --";  // >>> ENVELOPES <<<
-INPUT int Envelopes_Active_Tf = 4;             // Activate timeframes (1-255, e.g. M1=1,M5=2,M15=4,M30=8,H1=16,H2=32...)
-INPUT int Envelopes_MA_Period = 6;             // Period
-INPUT double Envelopes_Deviation = 0.5;        // Deviation for M1
-INPUT ENUM_MA_METHOD Envelopes_MA_Method = 3;  // MA Method
-INPUT int Envelopes_MA_Shift = 0;              // MA Shift
-INPUT ENUM_APPLIED_PRICE Envelopes_Applied_Price = 3;       // Applied Price
-INPUT int Envelopes_Shift = 0;                              // Shift
-INPUT ENUM_TRAIL_TYPE Envelopes_TrailingStopMethod = 23;    // Trail stop method
-INPUT ENUM_TRAIL_TYPE Envelopes_TrailingProfitMethod = -2;  // Trail profit method
-/* @todo INPUT */ int Envelopes_SignalOpenLevel = 0;        // Signal open level
-INPUT int Envelopes1_SignalBaseMethod = 48;                 // Signal base method (-127-127)
-INPUT int Envelopes1_OpenCondition1 = 1;                    // Open condition 1 (0-1023)
-INPUT int Envelopes1_OpenCondition2 = 0;                    // Open condition 2 (0-1023)
-INPUT ENUM_MARKET_EVENT Envelopes1_CloseCondition = 13;     // Close condition for M1
-INPUT double Envelopes_MaxSpread = 6.0;                     // Max spread to trade (pips)
+INPUT int Envelopes_MA_Period = 6;                                          // Period
+INPUT double Envelopes_Deviation = 0.5;                                     // Deviation for M1
+INPUT ENUM_MA_METHOD Envelopes_MA_Method = 3;                               // MA Method
+INPUT int Envelopes_MA_Shift = 0;                                           // MA Shift
+INPUT ENUM_APPLIED_PRICE Envelopes_Applied_Price = 3;                       // Applied Price
+INPUT int Envelopes_Shift = 0;                                              // Shift
+INPUT int Envelopes_SignalOpenMethod = 48;                                  // Signal open method (-127-127)
+INPUT int Envelopes_SignalOpenLevel = 0;                                    // Signal open level
+INPUT int Envelopes_SignalCloseMethod = 48;                                 // Signal close method (-127-127)
+INPUT int Envelopes_SignalCloseLevel = 0;                                   // Signal close level
+INPUT int Envelopes_PriceLimitMethod = 0;                                   // Price limit method
+INPUT double Envelopes_PriceLimitLevel = 0;                                 // Price limit level
+INPUT double Envelopes_MaxSpread = 6.0;                                     // Max spread to trade (pips)
 
 // Struct to define strategy parameters to override.
 struct Stg_Envelopes_Params : Stg_Params {
   unsigned int Envelopes_Period;
   ENUM_APPLIED_PRICE Envelopes_Applied_Price;
   int Envelopes_Shift;
-  ENUM_TRAIL_TYPE Envelopes_TrailingStopMethod;
-  ENUM_TRAIL_TYPE Envelopes_TrailingProfitMethod;
   double Envelopes_SignalOpenLevel;
-  long Envelopes_SignalBaseMethod;
-  long Envelopes_SignalOpenMethod1;
-  long Envelopes_SignalOpenMethod2;
+  int Envelopes_SignalOpenMethod;
   double Envelopes_SignalCloseLevel;
-  ENUM_MARKET_EVENT Envelopes_SignalCloseMethod1;
-  ENUM_MARKET_EVENT Envelopes_SignalCloseMethod2;
+  int Envelopes_SignalCloseMethod;
+  int Envelopes_PriceLimitMethod;
+  double Envelopes_PriceLimitLevel;
   double Envelopes_MaxSpread;
 
   // Constructor: Set default param values.
@@ -52,15 +47,12 @@ struct Stg_Envelopes_Params : Stg_Params {
       : Envelopes_Period(::Envelopes_Period),
         Envelopes_Applied_Price(::Envelopes_Applied_Price),
         Envelopes_Shift(::Envelopes_Shift),
-        Envelopes_TrailingStopMethod(::Envelopes_TrailingStopMethod),
-        Envelopes_TrailingProfitMethod(::Envelopes_TrailingProfitMethod),
+        Envelopes_SignalOpenMethod(::Envelopes_SignalOpenMethod),
         Envelopes_SignalOpenLevel(::Envelopes_SignalOpenLevel),
-        Envelopes_SignalBaseMethod(::Envelopes_SignalBaseMethod),
-        Envelopes_SignalOpenMethod1(::Envelopes_SignalOpenMethod1),
-        Envelopes_SignalOpenMethod2(::Envelopes_SignalOpenMethod2),
+        Envelopes_SignalCloseMethod(::Envelopes_SignalCloseMethod),
         Envelopes_SignalCloseLevel(::Envelopes_SignalCloseLevel),
-        Envelopes_SignalCloseMethod1(::Envelopes_SignalCloseMethod1),
-        Envelopes_SignalCloseMethod2(::Envelopes_SignalCloseMethod2),
+        Envelopes_PriceLimitMethod(::Envelopes_PriceLimitMethod),
+        Envelopes_PriceLimitLevel(::Envelopes_PriceLimitLevel),
         Envelopes_MaxSpread(::Envelopes_MaxSpread) {}
 };
 
@@ -112,11 +104,8 @@ class Stg_Envelopes : public Strategy {
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_Envelopes(adx_params, adx_iparams, cparams), NULL, NULL);
     sparams.logger.SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
-    sparams.SetSignals(_params.Envelopes_SignalBaseMethod, _params.Envelopes_SignalOpenMethod1,
-                       _params.Envelopes_SignalOpenMethod2, _params.Envelopes_SignalCloseMethod1,
-                       _params.Envelopes_SignalCloseMethod2, _params.Envelopes_SignalOpenLevel,
-                       _params.Envelopes_SignalCloseLevel);
-    sparams.SetStops(_params.Envelopes_TrailingProfitMethod, _params.Envelopes_TrailingStopMethod);
+    sparams.SetSignals(_params.Envelopes_SignalOpenMethod, _params.Envelopes_SignalOpenMethod,
+                       _params.Envelopes_SignalCloseMethod, _params.Envelopes_SignalCloseMethod);
     sparams.SetMaxSpread(_params.Envelopes_MaxSpread);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_Envelopes(sparams, "Envelopes");
@@ -129,10 +118,10 @@ class Stg_Envelopes : public Strategy {
    * @param
    *   _cmd (int) - type of trade order command
    *   period (int) - period to check for
-   *   _signal_method (int) - signal method to use by using bitwise AND operation
-   *   _signal_level1 (double) - signal level to consider the signal
+   *   _method (int) - signal method to use by using bitwise AND operation
+   *   _level1 (double) - signal level to consider the signal
    */
-  bool SignalOpen(ENUM_ORDER_TYPE _cmd, long _signal_method = EMPTY, double _signal_level = EMPTY) {
+  bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
     bool _result = false;
     double envelopes_0_main = ((Indi_Envelopes *)this.Data()).GetValue(LINE_MAIN, 0);
     double envelopes_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
@@ -143,39 +132,38 @@ class Stg_Envelopes : public Strategy {
     double envelopes_2_main = ((Indi_Envelopes *)this.Data()).GetValue(LINE_MAIN, 2);
     double envelopes_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
     double envelopes_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
-    if (_signal_method == EMPTY) _signal_method = GetSignalBaseMethod();
-    if (_signal_level1 == EMPTY) _signal_level1 = GetSignalLevel1();
-    if (_signal_level2 == EMPTY) _signal_level2 = GetSignalLevel2();
+    if (_level1 == EMPTY) _level1 = GetSignalLevel1();
+    if (_level2 == EMPTY) _level2 = GetSignalLevel2();
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         _result = Low[CURR] < envelopes_0_lower || Low[PREV] < envelopes_0_lower;  // price low was below the lower band
         // _result = _result || (envelopes_0_main > envelopes_2_main && Open[CURR] > envelopes_0_upper);
-        if (_signal_method != 0) {
-          if (METHOD(_signal_method, 0)) _result &= Open[CURR] > envelopes_0_lower;  // FIXME
-          if (METHOD(_signal_method, 1)) _result &= envelopes_0_main < envelopes_1_main;
-          if (METHOD(_signal_method, 2)) _result &= envelopes_0_lower < envelopes_1_lower;
-          if (METHOD(_signal_method, 3)) _result &= envelopes_0_upper < envelopes_1_upper;
-          if (METHOD(_signal_method, 4))
+        if (_method != 0) {
+          if (METHOD(_method, 0)) _result &= Open[CURR] > envelopes_0_lower;  // FIXME
+          if (METHOD(_method, 1)) _result &= envelopes_0_main < envelopes_1_main;
+          if (METHOD(_method, 2)) _result &= envelopes_0_lower < envelopes_1_lower;
+          if (METHOD(_method, 3)) _result &= envelopes_0_upper < envelopes_1_upper;
+          if (METHOD(_method, 4))
             _result &= envelopes_0_upper - envelopes_0_lower > envelopes_1_upper - envelopes_1_lower;
-          if (METHOD(_signal_method, 5)) _result &= this.Chart().GetAsk() < envelopes_0_main;
-          if (METHOD(_signal_method, 6)) _result &= Close[CURR] < envelopes_0_upper;
-          // if (METHOD(_signal_method, 7)) _result &= _chart.GetAsk() > Close[PREV];
+          if (METHOD(_method, 5)) _result &= this.Chart().GetAsk() < envelopes_0_main;
+          if (METHOD(_method, 6)) _result &= Close[CURR] < envelopes_0_upper;
+          // if (METHOD(_method, 7)) _result &= _chart.GetAsk() > Close[PREV];
         }
         break;
       case ORDER_TYPE_SELL:
         _result =
             High[CURR] > envelopes_0_upper || High[PREV] > envelopes_0_upper;  // price high was above the upper band
         // _result = _result || (envelopes_0_main < envelopes_2_main && Open[CURR] < envelopes_0_lower);
-        if (_signal_method != 0) {
-          if (METHOD(_signal_method, 0)) _result &= Open[CURR] < envelopes_0_upper;  // FIXME
-          if (METHOD(_signal_method, 1)) _result &= envelopes_0_main > envelopes_1_main;
-          if (METHOD(_signal_method, 2)) _result &= envelopes_0_lower > envelopes_1_lower;
-          if (METHOD(_signal_method, 3)) _result &= envelopes_0_upper > envelopes_1_upper;
-          if (METHOD(_signal_method, 4))
+        if (_method != 0) {
+          if (METHOD(_method, 0)) _result &= Open[CURR] < envelopes_0_upper;  // FIXME
+          if (METHOD(_method, 1)) _result &= envelopes_0_main > envelopes_1_main;
+          if (METHOD(_method, 2)) _result &= envelopes_0_lower > envelopes_1_lower;
+          if (METHOD(_method, 3)) _result &= envelopes_0_upper > envelopes_1_upper;
+          if (METHOD(_method, 4))
             _result &= envelopes_0_upper - envelopes_0_lower > envelopes_1_upper - envelopes_1_lower;
-          if (METHOD(_signal_method, 5)) _result &= this.Chart().GetAsk() > envelopes_0_main;
-          if (METHOD(_signal_method, 6)) _result &= Close[CURR] > envelopes_0_upper;
-          // if (METHOD(_signal_method, 7)) _result &= _chart.GetAsk() < Close[PREV];
+          if (METHOD(_method, 5)) _result &= this.Chart().GetAsk() > envelopes_0_main;
+          if (METHOD(_method, 6)) _result &= Close[CURR] > envelopes_0_upper;
+          // if (METHOD(_method, 7)) _result &= _chart.GetAsk() < Close[PREV];
         }
         break;
     }
@@ -185,8 +173,23 @@ class Stg_Envelopes : public Strategy {
   /**
    * Check strategy's closing signal.
    */
-  bool SignalClose(ENUM_ORDER_TYPE _cmd, long _signal_method = EMPTY, double _signal_level = EMPTY) {
-    if (_signal_level == EMPTY) _signal_level = GetSignalCloseLevel();
-    return SignalOpen(Order::NegateOrderType(_cmd), _signal_method, _signal_level);
+  bool SignalClose(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
+    return SignalOpen(Order::NegateOrderType(_cmd), _method, _level);
+  }
+
+  /**
+   * Gets price limit value for profit take or stop loss.
+   */
+  double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_STG_PRICE_LIMIT_MODE _mode, int _method = 0, double _level = 0.0) {
+    double _trail = _level * Market().GetPipSize();
+    int _direction = Order::OrderDirection(_cmd) * (_mode == LIMIT_VALUE_STOP ? -1 : 1);
+    double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
+    double _result = _default_value;
+    switch (_method) {
+      case 0: {
+        // @todo
+      }
+    }
+    return _result;
   }
 };
