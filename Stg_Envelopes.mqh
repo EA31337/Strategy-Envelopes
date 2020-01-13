@@ -31,7 +31,10 @@ INPUT double Envelopes_MaxSpread = 6.0;                                     // M
 
 // Struct to define strategy parameters to override.
 struct Stg_Envelopes_Params : Stg_Params {
-  unsigned int Envelopes_Period;
+  int Envelopes_MA_Period;
+  double Envelopes_Deviation;
+  ENUM_MA_METHOD Envelopes_MA_Method;
+  int Envelopes_MA_Shift;
   ENUM_APPLIED_PRICE Envelopes_Applied_Price;
   int Envelopes_Shift;
   double Envelopes_SignalOpenLevel;
@@ -44,7 +47,10 @@ struct Stg_Envelopes_Params : Stg_Params {
 
   // Constructor: Set default param values.
   Stg_Envelopes_Params()
-      : Envelopes_Period(::Envelopes_Period),
+      : Envelopes_MA_Period(::Envelopes_MA_Period),
+        Envelopes_Deviation(::Envelopes_Deviation),
+        Envelopes_MA_Method(::Envelopes_MA_Method),
+        Envelopes_MA_Shift(::Envelopes_MA_Shift),
         Envelopes_Applied_Price(::Envelopes_Applied_Price),
         Envelopes_Shift(::Envelopes_Shift),
         Envelopes_SignalOpenMethod(::Envelopes_SignalOpenMethod),
@@ -99,9 +105,9 @@ class Stg_Envelopes : public Strategy {
     }
     // Initialize strategy parameters.
     ChartParams cparams(_tf);
-    Envelopes_Params adx_params(_params.Envelopes_Period, _params.Envelopes_Applied_Price);
-    IndicatorParams adx_iparams(10, INDI_Envelopes);
-    StgParams sparams(new Trade(_tf, _Symbol), new Indi_Envelopes(adx_params, adx_iparams, cparams), NULL, NULL);
+    Envelopes_Params env_params(_params.Envelopes_MA_Period, _params.Envelopes_MA_Shift, _params.Envelopes_MA_Method, _params.Envelopes_Applied_Price, _params.Envelopes_Deviation);
+    IndicatorParams env_iparams(10, INDI_ENVELOPES);
+    StgParams sparams(new Trade(_tf, _Symbol), new Indi_Envelopes(env_params, env_iparams, cparams), NULL, NULL);
     sparams.logger.SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
     sparams.SetSignals(_params.Envelopes_SignalOpenMethod, _params.Envelopes_SignalOpenMethod,
@@ -119,7 +125,7 @@ class Stg_Envelopes : public Strategy {
    *   _cmd (int) - type of trade order command
    *   period (int) - period to check for
    *   _method (int) - signal method to use by using bitwise AND operation
-   *   _level1 (double) - signal level to consider the signal
+   *   _level (double) - signal level to consider the signal
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
     bool _result = false;
@@ -132,8 +138,6 @@ class Stg_Envelopes : public Strategy {
     double envelopes_2_main = ((Indi_Envelopes *)this.Data()).GetValue(LINE_MAIN, 2);
     double envelopes_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
     double envelopes_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
-    if (_level1 == EMPTY) _level1 = GetSignalLevel1();
-    if (_level2 == EMPTY) _level2 = GetSignalLevel2();
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         _result = Low[CURR] < envelopes_0_lower || Low[PREV] < envelopes_0_lower;  // price low was below the lower band
