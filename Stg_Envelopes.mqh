@@ -229,9 +229,20 @@ class Stg_Envelopes : public Strategy {
     int _direction = Order::OrderDirection(_cmd) * (_mode == ORDER_TYPE_SL ? -1 : 1);
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
     double _result = _default_value;
+    
+    double indi_0 = ((Indi_Envelopes *)Data()).GetValue(0);
+    double indi_1 = ((Indi_Envelopes *)Data()).GetValue(1);
+    double indi_2 = ((Indi_Envelopes *)Data()).GetValue(2);
+    
     switch (_method) {
-      case 0: {
-        // @todo
+      case 0:
+        _diff = fabs(open_0 - indi_0);
+        _result = open_0 + (_diff + _trail) * _direction;
+        break;
+      case 1:
+        _diff = fmax(fabs(open_0 - fmax(indi_0, indi_1)), fabs(open_0 - fmin(indi_0, indi_1)));
+        _result = open_0 + (_diff + _trail) * _direction;
+        break;
       }
     }
     return _result;
