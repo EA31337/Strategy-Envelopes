@@ -230,20 +230,38 @@ class Stg_Envelopes : public Strategy {
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
     double _result = _default_value;
     
-    double indi_0 = ((Indi_Envelopes *)Data()).GetValue(0);
-    double indi_1 = ((Indi_Envelopes *)Data()).GetValue(1);
-    double indi_2 = ((Indi_Envelopes *)Data()).GetValue(2);
+    double envelopes_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
+    double envelopes_0_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 0);
+    double envelopes_1_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 1);
+    double envelopes_1_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 1);
+    double envelopes_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
+    double envelopes_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
     
-    switch (_method) {
-      case 0:
-        _diff = fabs(open_0 - indi_0);
-        _result = open_0 + (_diff + _trail) * _direction;
+    double open_curr  = Chart().GetOpen();
+    double close_curr = Chart().GetClose();
+    double ask_curr   = Chart().GetAsk();
+    
+    switch (_cmd) {
+      case ORDER_TYPE_BUY:
+        switch (_method) {
+         case 0:
+           _result = envelopes_2_lower;
+           break;
+         case 1:
+           _result = envelopes_2_lower;
+           break;
+        }
         break;
-      case 1:
-        _diff = fmax(fabs(open_0 - fmax(indi_0, indi_1)), fabs(open_0 - fmin(indi_0, indi_1)));
-        _result = open_0 + (_diff + _trail) * _direction;
+      case ORDER_TYPE_SELL:
+        switch (_method) {
+         case 0:
+           _result = envelopes_2_upper;
+           break;
+         case 1:
+           _result = envelopes_2_upper;
+           break;
+        }
         break;
-      }
     }
     return _result;
   }
