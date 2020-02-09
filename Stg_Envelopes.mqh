@@ -229,10 +229,39 @@ class Stg_Envelopes : public Strategy {
     int _direction = Order::OrderDirection(_cmd) * (_mode == ORDER_TYPE_SL ? -1 : 1);
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
     double _result = _default_value;
-    switch (_method) {
-      case 0: {
-        // @todo
-      }
+    
+    double envelopes_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
+    double envelopes_0_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 0);
+    double envelopes_1_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 1);
+    double envelopes_1_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 1);
+    double envelopes_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
+    double envelopes_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
+    
+    double open_curr  = Chart().GetOpen();
+    double close_curr = Chart().GetClose();
+    double ask_curr   = Chart().GetAsk();
+    
+    switch (_cmd) {
+      case ORDER_TYPE_BUY:
+        switch (_method) {
+         case 0:
+           _result = envelopes_2_lower;
+           break;
+         case 1:
+           _result = envelopes_2_lower;
+           break;
+        }
+        break;
+      case ORDER_TYPE_SELL:
+        switch (_method) {
+         case 0:
+           _result = envelopes_2_upper;
+           break;
+         case 1:
+           _result = envelopes_2_upper;
+           break;
+        }
+        break;
     }
     return _result;
   }
