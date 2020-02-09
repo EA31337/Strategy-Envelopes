@@ -84,7 +84,8 @@ class Stg_Envelopes : public Strategy {
     // Initialize strategy initial values.
     Stg_Envelopes_Params _params;
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Stg_Envelopes_Params>(_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1, stg_env_h4, stg_env_h4);
+      SetParamsByTf<Stg_Envelopes_Params>(_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1,
+                                          stg_env_h4, stg_env_h4);
     }
     // Initialize strategy parameters.
     ChartParams cparams(_tf);
@@ -116,13 +117,13 @@ class Stg_Envelopes : public Strategy {
     bool _result = false;
     double env_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
     double env_0_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 0);
-    double env_0_main = (env_0_upper + env_0_lower)/2;
+    double env_0_main = (env_0_upper + env_0_lower) / 2;
     double env_1_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 1);
     double env_1_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 1);
-    double env_1_main = (env_1_upper + env_1_lower)/2;
+    double env_1_main = (env_1_upper + env_1_lower) / 2;
     double env_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
     double env_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
-    double env_2_main = (env_2_upper + env_2_lower)/2;
+    double env_2_main = (env_2_upper + env_2_lower) / 2;
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         _result = Low[CURR] < env_0_lower || Low[PREV] < env_0_lower;  // price low was below the lower band
@@ -132,24 +133,21 @@ class Stg_Envelopes : public Strategy {
           if (METHOD(_method, 1)) _result &= env_0_main < env_1_main;
           if (METHOD(_method, 2)) _result &= env_0_lower < env_1_lower;
           if (METHOD(_method, 3)) _result &= env_0_upper < env_1_upper;
-          if (METHOD(_method, 4))
-            _result &= env_0_upper - env_0_lower > env_1_upper - env_1_lower;
+          if (METHOD(_method, 4)) _result &= env_0_upper - env_0_lower > env_1_upper - env_1_lower;
           if (METHOD(_method, 5)) _result &= this.Chart().GetAsk() < env_0_main;
           if (METHOD(_method, 6)) _result &= Close[CURR] < env_0_upper;
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() > Close[PREV];
         }
         break;
       case ORDER_TYPE_SELL:
-        _result =
-            High[CURR] > env_0_upper || High[PREV] > env_0_upper;  // price high was above the upper band
+        _result = High[CURR] > env_0_upper || High[PREV] > env_0_upper;  // price high was above the upper band
         // _result = _result || (env_0_main < env_2_main && Open[CURR] < env_0_lower);
         if (_method != 0) {
           if (METHOD(_method, 0)) _result &= Open[CURR] < env_0_upper;  // FIXME
           if (METHOD(_method, 1)) _result &= env_0_main > env_1_main;
           if (METHOD(_method, 2)) _result &= env_0_lower > env_1_lower;
           if (METHOD(_method, 3)) _result &= env_0_upper > env_1_upper;
-          if (METHOD(_method, 4))
-            _result &= env_0_upper - env_0_lower > env_1_upper - env_1_lower;
+          if (METHOD(_method, 4)) _result &= env_0_upper - env_0_lower > env_1_upper - env_1_lower;
           if (METHOD(_method, 5)) _result &= this.Chart().GetAsk() > env_0_main;
           if (METHOD(_method, 6)) _result &= Close[CURR] > env_0_upper;
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() < Close[PREV];
@@ -209,37 +207,37 @@ class Stg_Envelopes : public Strategy {
 
     double env_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
     double env_0_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 0);
-    double env_0_main = (env_0_upper + env_0_lower)/2;
+    double env_0_main = (env_0_upper + env_0_lower) / 2;
     double env_1_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 1);
     double env_1_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 1);
-    double env_1_main = (env_1_upper + env_1_lower)/2;
+    double env_1_main = (env_1_upper + env_1_lower) / 2;
     double env_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
     double env_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
-    double env_2_main = (env_2_upper + env_2_lower)/2;
-    
-    double open_curr  = Chart().GetOpen();
+    double env_2_main = (env_2_upper + env_2_lower) / 2;
+
+    double open_curr = Chart().GetOpen();
     double close_curr = Chart().GetClose();
-    double ask_curr   = Chart().GetAsk();
-    
+    double ask_curr = Chart().GetAsk();
+
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         switch (_method) {
-         case 0:
-           _result = env_2_lower;
-           break;
-         case 1:
-           _result = env_2_lower;
-           break;
+          case 0:
+            _result = env_2_lower;
+            break;
+          case 1:
+            _result = env_2_lower;
+            break;
         }
         break;
       case ORDER_TYPE_SELL:
         switch (_method) {
-         case 0:
-           _result = env_2_upper;
-           break;
-         case 1:
-           _result = env_2_upper;
-           break;
+          case 0:
+            _result = env_2_upper;
+            break;
+          case 1:
+            _result = env_2_upper;
+            break;
         }
         break;
     }
