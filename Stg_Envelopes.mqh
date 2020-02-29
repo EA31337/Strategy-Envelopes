@@ -104,13 +104,7 @@ class Stg_Envelopes : public Strategy {
   }
 
   /**
-   * Check if Envelopes indicator is on sell.
-   *
-   * @param
-   *   _cmd (int) - type of trade order command
-   *   period (int) - period to check for
-   *   _method (int) - signal method to use by using bitwise AND operation
-   *   _level (double) - signal level to consider the signal
+   * Check strategy's opening signal.
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
     bool _result = false;
@@ -123,6 +117,10 @@ class Stg_Envelopes : public Strategy {
     double env_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
     double env_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
     double env_2_main = (env_2_upper + env_2_lower) / 2;
+    if (GetLastError() > 0) {
+      // Returns false when indicator data is not ready.
+      return false;
+    }
     switch (_cmd) {
       case ORDER_TYPE_BUY:
         _result = Low[CURR] < env_0_lower || Low[PREV] < env_0_lower;  // price low was below the lower band
@@ -201,7 +199,7 @@ class Stg_Envelopes : public Strategy {
   double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, double _level = 0.0) {
     double _trail = _level * Market().GetPipSize();
     int _direction = Order::OrderDirection(_cmd) * (_mode == ORDER_TYPE_SL ? -1 : 1);
-    double _default_value = Market().GetCloseOffer(_cmd) + _trail * _method * _direction;
+    double _default_value = Market().GetCloseOffer(_cmd) + _trail * _direction;
     double _result = _default_value;
 
     double env_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
@@ -214,31 +212,33 @@ class Stg_Envelopes : public Strategy {
     double env_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
     double env_2_main = (env_2_upper + env_2_lower) / 2;
 
-    double open_curr = Chart().GetOpen();
-    double close_curr = Chart().GetClose();
-    double ask_curr = Chart().GetAsk();
-
-    switch (_cmd) {
-      case ORDER_TYPE_BUY:
-        switch (_method) {
-          case 0:
-            _result = env_2_lower;
-            break;
-          case 1:
-            _result = env_2_lower;
-            break;
-        }
-        break;
-      case ORDER_TYPE_SELL:
-        switch (_method) {
-          case 0:
-            _result = env_2_upper;
-            break;
-          case 1:
-            _result = env_2_upper;
-            break;
-        }
-        break;
+    if (GetLastError() > ERR_INDICATOR_DATA_NOT_FOUND) {
+      // Returns false when indicator data is not ready.
+      return false;
+    }
+    switch (_method) {
+      case 0: {
+        _result = (_direction > 0 ? env_0_upper : env_0_lower) + _trail * _direction;
+      }
+      case 1: {
+        _result = (_direction > 0 ? env_1_upper : env_1_lower) + _trail * _direction;
+      }
+      case 2: {
+        _result = (_direction > 0 ? env_2_upper : env_2_lower) + _trail * _direction;
+      }
+      case 3: {
+        _result = (_direction > 0 ? fmax(env_1_upper, env_2_upper) : fmin(env_1_lower, env_2_lower)) +
+                  _trail * _direction;
+      }
+      case 4: {
+        _result = env_0_main + _trail * _direction;
+      }
+      case 5: {
+        _result = env_1_main + _trail * _direction;
+      }
+      case 6: {
+        _result = env_2_main + _trail * _direction;
+      }
     }
     return _result;
   }
