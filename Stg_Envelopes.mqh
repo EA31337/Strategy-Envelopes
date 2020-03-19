@@ -107,46 +107,43 @@ class Stg_Envelopes : public Strategy {
    * Check strategy's opening signal.
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
-    bool _result = false;
-    double env_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
-    double env_0_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 0);
-    double env_0_main = (env_0_upper + env_0_lower) / 2;
-    double env_1_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 1);
-    double env_1_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 1);
-    double env_1_main = (env_1_upper + env_1_lower) / 2;
-    double env_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
-    double env_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
-    double env_2_main = (env_2_upper + env_2_lower) / 2;
-    if (GetLastError() > 0) {
-      // Returns false when indicator data is not ready.
+    Chart *_chart = Chart();
+    Indicator *_indi = Data();
+    bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
+    bool _result = _is_valid;
+    if (!_result) {
+      // Returns false when indicator data is not valid.
       return false;
     }
+    double level = _level * Chart().GetPipSize();
+    double ask = Chart().GetAsk();
+    double bid = Chart().GetBid();
     switch (_cmd) {
       case ORDER_TYPE_BUY:
-        _result = Low[CURR] < env_0_lower || Low[PREV] < env_0_lower;  // price low was below the lower band
-        // _result = _result || (env_0_main > env_2_main && Open[CURR] > env_0_upper);
+        _result = Low[CURR] < _indi[CURR].value[LINE_LOWER] || Low[PREV] < _indi[CURR].value[LINE_LOWER];  // price low was below the lower band
+        // _result = _result || (_indi[CURR]_main > _indi[PPREV]_main && Open[CURR] > _indi[CURR].value[LINE_UPPER]);
         if (_method != 0) {
-          if (METHOD(_method, 0)) _result &= Open[CURR] > env_0_lower;  // FIXME
-          if (METHOD(_method, 1)) _result &= env_0_main < env_1_main;
-          if (METHOD(_method, 2)) _result &= env_0_lower < env_1_lower;
-          if (METHOD(_method, 3)) _result &= env_0_upper < env_1_upper;
-          if (METHOD(_method, 4)) _result &= env_0_upper - env_0_lower > env_1_upper - env_1_lower;
-          if (METHOD(_method, 5)) _result &= this.Chart().GetAsk() < env_0_main;
-          if (METHOD(_method, 6)) _result &= Close[CURR] < env_0_upper;
+          if (METHOD(_method, 0)) _result &= Chart().GetOpen() > _indi[CURR].value[LINE_LOWER];  // FIXME
+          if (METHOD(_method, 1)) _result &= (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 < (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2;
+          if (METHOD(_method, 2)) _result &= _indi[CURR].value[LINE_LOWER] < _indi[PREV].value[LINE_LOWER];
+          if (METHOD(_method, 3)) _result &= _indi[CURR].value[LINE_UPPER] < _indi[PREV].value[LINE_UPPER];
+          if (METHOD(_method, 4)) _result &= _indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER] > _indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER];
+          if (METHOD(_method, 5)) _result &= ask < (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2;
+          if (METHOD(_method, 6)) _result &= Chart().GetClose() < _indi[CURR].value[LINE_UPPER];
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() > Close[PREV];
         }
         break;
       case ORDER_TYPE_SELL:
-        _result = High[CURR] > env_0_upper || High[PREV] > env_0_upper;  // price high was above the upper band
-        // _result = _result || (env_0_main < env_2_main && Open[CURR] < env_0_lower);
+        _result = High[CURR] > _indi[CURR].value[LINE_UPPER] || High[PREV] > _indi[CURR].value[LINE_UPPER];  // price high was above the upper band
+        // _result = _result || (_indi[CURR]_main < _indi[PPREV]_main && Open[CURR] < _indi[CURR].value[LINE_LOWER]);
         if (_method != 0) {
-          if (METHOD(_method, 0)) _result &= Open[CURR] < env_0_upper;  // FIXME
-          if (METHOD(_method, 1)) _result &= env_0_main > env_1_main;
-          if (METHOD(_method, 2)) _result &= env_0_lower > env_1_lower;
-          if (METHOD(_method, 3)) _result &= env_0_upper > env_1_upper;
-          if (METHOD(_method, 4)) _result &= env_0_upper - env_0_lower > env_1_upper - env_1_lower;
-          if (METHOD(_method, 5)) _result &= this.Chart().GetAsk() > env_0_main;
-          if (METHOD(_method, 6)) _result &= Close[CURR] > env_0_upper;
+          if (METHOD(_method, 0)) _result &= Chart().GetOpen() < _indi[CURR].value[LINE_UPPER];  // FIXME
+          if (METHOD(_method, 1)) _result &= (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 > (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2;
+          if (METHOD(_method, 2)) _result &= _indi[CURR].value[LINE_LOWER] > _indi[PREV].value[LINE_LOWER];
+          if (METHOD(_method, 3)) _result &= _indi[CURR].value[LINE_UPPER] > _indi[PREV].value[LINE_UPPER];
+          if (METHOD(_method, 4)) _result &= _indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER] > _indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER];
+          if (METHOD(_method, 5)) _result &= ask > (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2;
+          if (METHOD(_method, 6)) _result &= Chart().GetClose() > _indi[CURR].value[LINE_UPPER];
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() < Close[PREV];
         }
         break;
@@ -197,20 +194,11 @@ class Stg_Envelopes : public Strategy {
    * Gets price limit value for profit take or stop loss.
    */
   double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, double _level = 0.0) {
+    Indicator *_indi = Data();
     double _trail = _level * Market().GetPipSize();
-    int _direction = Order::OrderDirection(_cmd) * (_mode == ORDER_TYPE_SL ? -1 : 1);
+    int _direction = Order::OrderDirection(_cmd, _mode);
     double _default_value = Market().GetCloseOffer(_cmd) + _trail * _direction;
     double _result = _default_value;
-
-    double env_0_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 0);
-    double env_0_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 0);
-    double env_0_main = (env_0_upper + env_0_lower) / 2;
-    double env_1_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 1);
-    double env_1_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 1);
-    double env_1_main = (env_1_upper + env_1_lower) / 2;
-    double env_2_lower = ((Indi_Envelopes *)this.Data()).GetValue(LINE_LOWER, 2);
-    double env_2_upper = ((Indi_Envelopes *)this.Data()).GetValue(LINE_UPPER, 2);
-    double env_2_main = (env_2_upper + env_2_lower) / 2;
 
     if (GetLastError() > ERR_INDICATOR_DATA_NOT_FOUND) {
       // Returns false when indicator data is not ready.
@@ -218,26 +206,33 @@ class Stg_Envelopes : public Strategy {
     }
     switch (_method) {
       case 0: {
-        _result = (_direction > 0 ? env_0_upper : env_0_lower) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[CURR].value[LINE_UPPER] : _indi[CURR].value[LINE_LOWER]) + _trail * _direction;
+        break;
       }
       case 1: {
-        _result = (_direction > 0 ? env_1_upper : env_1_lower) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[PREV].value[LINE_UPPER] : _indi[PREV].value[LINE_LOWER]) + _trail * _direction;
+        break;
       }
       case 2: {
-        _result = (_direction > 0 ? env_2_upper : env_2_lower) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[PPREV].value[LINE_UPPER] : _indi[PPREV].value[LINE_LOWER]) + _trail * _direction;
+        break;
       }
       case 3: {
-        _result = (_direction > 0 ? fmax(env_1_upper, env_2_upper) : fmin(env_1_lower, env_2_lower)) +
+        _result = (_direction > 0 ? fmax(_indi[PREV].value[LINE_UPPER], _indi[PPREV].value[LINE_UPPER]) : fmin(_indi[PREV].value[LINE_LOWER], _indi[PPREV].value[LINE_LOWER])) +
                   _trail * _direction;
+        break;
       }
       case 4: {
-        _result = env_0_main + _trail * _direction;
+        _result = (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 + _trail * _direction;
+        break;
       }
       case 5: {
-        _result = env_1_main + _trail * _direction;
+        _result = (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2 + _trail * _direction;
+        break;
       }
       case 6: {
-        _result = env_2_main + _trail * _direction;
+        _result = (_indi[PPREV].value[LINE_UPPER] - _indi[PPREV].value[LINE_LOWER]) / 2 + _trail * _direction;
+        break;
       }
     }
     return _result;
