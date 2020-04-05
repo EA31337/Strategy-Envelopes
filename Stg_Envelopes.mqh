@@ -97,6 +97,7 @@ class Stg_Envelopes : public Strategy {
     sparams.SetSignals(_params.Envelopes_SignalOpenMethod, _params.Envelopes_SignalOpenLevel,
                        _params.Envelopes_SignalOpenFilterMethod, _params.Envelopes_SignalOpenBoostMethod,
                        _params.Envelopes_SignalCloseMethod, _params.Envelopes_SignalCloseMethod);
+    sparams.SetPriceLimits(_params.Envelopes_PriceLimitMethod, _params.Envelopes_PriceLimitLevel);
     sparams.SetMaxSpread(_params.Envelopes_MaxSpread);
     // Initialize strategy instance.
     Strategy *_strat = new Stg_Envelopes(sparams, "Envelopes");
