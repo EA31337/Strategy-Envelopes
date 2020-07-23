@@ -92,7 +92,7 @@ class Stg_Envelopes : public Strategy {
                                 _params.Envelopes_Applied_Price, _params.Envelopes_Deviation);
     env_params.SetTf(_tf);
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_Envelopes(env_params), NULL, NULL);
-    sparams.logger.SetLevel(_log_level);
+    sparams.logger.Ptr().SetLevel(_log_level);
     sparams.SetMagicNo(_magic_no);
     sparams.SetSignals(_params.Envelopes_SignalOpenMethod, _params.Envelopes_SignalOpenLevel,
                        _params.Envelopes_SignalOpenFilterMethod, _params.Envelopes_SignalOpenBoostMethod,
