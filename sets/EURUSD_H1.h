@@ -8,7 +8,7 @@
 struct Stg_Envelopes_EURUSD_H1_Params : Stg_Envelopes_Params {
   Stg_Envelopes_EURUSD_H1_Params() {
     Envelopes_MA_Period = 6;
-    Envelopes_Deviation = 0.2;
+    Envelopes_Deviation = 0.2f;
     Envelopes_MA_Method = 0;
     Envelopes_MA_Shift = 0;
     Envelopes_Applied_Price = 3;

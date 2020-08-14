@@ -8,7 +8,7 @@
 struct Stg_Envelopes_EURUSD_M30_Params : Stg_Envelopes_Params {
   Stg_Envelopes_EURUSD_M30_Params() {
     Envelopes_MA_Period = 6;
-    Envelopes_Deviation = 0.3;
+    Envelopes_Deviation = 0.3f;
     Envelopes_MA_Method = 0;
     Envelopes_MA_Shift = 0;
     Envelopes_Applied_Price = 3;

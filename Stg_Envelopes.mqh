@@ -5,20 +5,20 @@
 
 // User input params.
 INPUT int Envelopes_MA_Period = 6;                     // Period
-INPUT float Envelopes_Deviation = 0.5;                // Deviation for M1
+INPUT float Envelopes_Deviation = 0.5;                 // Deviation for M1
 INPUT ENUM_MA_METHOD Envelopes_MA_Method = 3;          // MA Method
 INPUT int Envelopes_MA_Shift = 0;                      // MA Shift
 INPUT ENUM_APPLIED_PRICE Envelopes_Applied_Price = 3;  // Applied Price
 INPUT int Envelopes_Shift = 0;                         // Shift
 INPUT int Envelopes_SignalOpenMethod = 48;             // Signal open method (-127-127)
-INPUT float Envelopes_SignalOpenLevel = 0;            // Signal open level
+INPUT float Envelopes_SignalOpenLevel = 0;             // Signal open level
 INPUT int Envelopes_SignalOpenFilterMethod = 0;        // Signal open filter method
 INPUT int Envelopes_SignalOpenBoostMethod = 0;         // Signal open filter method
 INPUT int Envelopes_SignalCloseMethod = 48;            // Signal close method (-127-127)
-INPUT int Envelopes_SignalCloseLevel = 0;              // Signal close level
+INPUT float Envelopes_SignalCloseLevel = 0;            // Signal close level
 INPUT int Envelopes_PriceLimitMethod = 0;              // Price limit method
-INPUT float Envelopes_PriceLimitLevel = 0;            // Price limit level
-INPUT float Envelopes_MaxSpread = 6.0;                // Max spread to trade (pips)
+INPUT float Envelopes_PriceLimitLevel = 0;             // Price limit level
+INPUT float Envelopes_MaxSpread = 6.0;                 // Max spread to trade (pips)
 
 // Includes.
 #include <EA31337-classes/Indicators/Indi_Envelopes.mqh>
@@ -27,20 +27,20 @@ INPUT float Envelopes_MaxSpread = 6.0;                // Max spread to trade (pi
 // Struct to define strategy parameters to override.
 struct Stg_Envelopes_Params : StgParams {
   int Envelopes_MA_Period;
-  double Envelopes_Deviation;
+  float Envelopes_Deviation;
   ENUM_MA_METHOD Envelopes_MA_Method;
   int Envelopes_MA_Shift;
   ENUM_APPLIED_PRICE Envelopes_Applied_Price;
   int Envelopes_Shift;
   int Envelopes_SignalOpenMethod;
-  double Envelopes_SignalOpenLevel;
+  float Envelopes_SignalOpenLevel;
   int Envelopes_SignalOpenFilterMethod;
   int Envelopes_SignalOpenBoostMethod;
-  double Envelopes_SignalCloseLevel;
+  float Envelopes_SignalCloseLevel;
   int Envelopes_SignalCloseMethod;
   int Envelopes_PriceLimitMethod;
-  double Envelopes_PriceLimitLevel;
-  double Envelopes_MaxSpread;
+  float Envelopes_PriceLimitLevel;
+  float Envelopes_MaxSpread;
 
   // Constructor: Set default param values.
   Stg_Envelopes_Params()
@@ -217,6 +217,6 @@ class Stg_Envelopes : public Strategy {
         break;
       }
     }
-    return _result;
+    return (float)_result;
   }
 };
