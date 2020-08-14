@@ -1,35 +1,28 @@
-//+------------------------------------------------------------------+
-//|                  EA31337 - multi-strategy advanced trading robot |
-//|                       Copyright 2016-2020, 31337 Investments Ltd |
-//|                                       https://github.com/EA31337 |
-//+------------------------------------------------------------------+
-
 /**
  * @file
  * Implements Envelopes strategy the Envelopes indicator.
  */
 
+// User input params.
+INPUT int Envelopes_MA_Period = 6;                     // Period
+INPUT float Envelopes_Deviation = 0.5;                // Deviation for M1
+INPUT ENUM_MA_METHOD Envelopes_MA_Method = 3;          // MA Method
+INPUT int Envelopes_MA_Shift = 0;                      // MA Shift
+INPUT ENUM_APPLIED_PRICE Envelopes_Applied_Price = 3;  // Applied Price
+INPUT int Envelopes_Shift = 0;                         // Shift
+INPUT int Envelopes_SignalOpenMethod = 48;             // Signal open method (-127-127)
+INPUT float Envelopes_SignalOpenLevel = 0;            // Signal open level
+INPUT int Envelopes_SignalOpenFilterMethod = 0;        // Signal open filter method
+INPUT int Envelopes_SignalOpenBoostMethod = 0;         // Signal open filter method
+INPUT int Envelopes_SignalCloseMethod = 48;            // Signal close method (-127-127)
+INPUT int Envelopes_SignalCloseLevel = 0;              // Signal close level
+INPUT int Envelopes_PriceLimitMethod = 0;              // Price limit method
+INPUT float Envelopes_PriceLimitLevel = 0;            // Price limit level
+INPUT float Envelopes_MaxSpread = 6.0;                // Max spread to trade (pips)
+
 // Includes.
 #include <EA31337-classes/Indicators/Indi_Envelopes.mqh>
 #include <EA31337-classes/Strategy.mqh>
-
-// User input params.
-INPUT string __Envelopes_Parameters__ = "-- Envelopes strategy params --";  // >>> ENVELOPES <<<
-INPUT int Envelopes_MA_Period = 6;                                          // Period
-INPUT double Envelopes_Deviation = 0.5;                                     // Deviation for M1
-INPUT ENUM_MA_METHOD Envelopes_MA_Method = 3;                               // MA Method
-INPUT int Envelopes_MA_Shift = 0;                                           // MA Shift
-INPUT ENUM_APPLIED_PRICE Envelopes_Applied_Price = 3;                       // Applied Price
-INPUT int Envelopes_Shift = 0;                                              // Shift
-INPUT int Envelopes_SignalOpenMethod = 48;                                  // Signal open method (-127-127)
-INPUT double Envelopes_SignalOpenLevel = 0;                                 // Signal open level
-INPUT int Envelopes_SignalOpenFilterMethod = 0;                             // Signal open filter method
-INPUT int Envelopes_SignalOpenBoostMethod = 0;                              // Signal open filter method
-INPUT int Envelopes_SignalCloseMethod = 48;                                 // Signal close method (-127-127)
-INPUT int Envelopes_SignalCloseLevel = 0;                                   // Signal close level
-INPUT int Envelopes_PriceLimitMethod = 0;                                   // Price limit method
-INPUT double Envelopes_PriceLimitLevel = 0;                                 // Price limit level
-INPUT double Envelopes_MaxSpread = 6.0;                                     // Max spread to trade (pips)
 
 // Struct to define strategy parameters to override.
 struct Stg_Envelopes_Params : StgParams {
@@ -89,7 +82,7 @@ class Stg_Envelopes : public Strategy {
     }
     // Initialize strategy parameters.
     EnvelopesParams env_params(_params.Envelopes_MA_Period, _params.Envelopes_MA_Shift, _params.Envelopes_MA_Method,
-                                _params.Envelopes_Applied_Price, _params.Envelopes_Deviation);
+                               _params.Envelopes_Applied_Price, _params.Envelopes_Deviation);
     env_params.SetTf(_tf);
     StgParams sparams(new Trade(_tf, _Symbol), new Indi_Envelopes(env_params), NULL, NULL);
     sparams.logger.Ptr().SetLevel(_log_level);
@@ -107,7 +100,7 @@ class Stg_Envelopes : public Strategy {
   /**
    * Check strategy's opening signal.
    */
-  bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
+  bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0) {
     Chart *_chart = Chart();
     Indi_Envelopes *_indi = Data();
     bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
@@ -121,28 +114,38 @@ class Stg_Envelopes : public Strategy {
     double bid = Chart().GetBid();
     switch (_cmd) {
       case ORDER_TYPE_BUY:
-        _result = Low[CURR] < _indi[CURR].value[LINE_LOWER] || Low[PREV] < _indi[CURR].value[LINE_LOWER];  // price low was below the lower band
+        _result = Low[CURR] < _indi[CURR].value[LINE_LOWER] ||
+                  Low[PREV] < _indi[CURR].value[LINE_LOWER];  // price low was below the lower band
         // _result = _result || (_indi[CURR]_main > _indi[PPREV]_main && Open[CURR] > _indi[CURR].value[LINE_UPPER]);
         if (_method != 0) {
           if (METHOD(_method, 0)) _result &= Chart().GetOpen() > _indi[CURR].value[LINE_LOWER];  // FIXME
-          if (METHOD(_method, 1)) _result &= (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 < (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2;
+          if (METHOD(_method, 1))
+            _result &= (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 <
+                       (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2;
           if (METHOD(_method, 2)) _result &= _indi[CURR].value[LINE_LOWER] < _indi[PREV].value[LINE_LOWER];
           if (METHOD(_method, 3)) _result &= _indi[CURR].value[LINE_UPPER] < _indi[PREV].value[LINE_UPPER];
-          if (METHOD(_method, 4)) _result &= _indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER] > _indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER];
+          if (METHOD(_method, 4))
+            _result &= _indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER] >
+                       _indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER];
           if (METHOD(_method, 5)) _result &= ask < (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2;
           if (METHOD(_method, 6)) _result &= Chart().GetClose() < _indi[CURR].value[LINE_UPPER];
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() > Close[PREV];
         }
         break;
       case ORDER_TYPE_SELL:
-        _result = High[CURR] > _indi[CURR].value[LINE_UPPER] || High[PREV] > _indi[CURR].value[LINE_UPPER];  // price high was above the upper band
+        _result = High[CURR] > _indi[CURR].value[LINE_UPPER] ||
+                  High[PREV] > _indi[CURR].value[LINE_UPPER];  // price high was above the upper band
         // _result = _result || (_indi[CURR]_main < _indi[PPREV]_main && Open[CURR] < _indi[CURR].value[LINE_LOWER]);
         if (_method != 0) {
           if (METHOD(_method, 0)) _result &= Chart().GetOpen() < _indi[CURR].value[LINE_UPPER];  // FIXME
-          if (METHOD(_method, 1)) _result &= (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 > (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2;
+          if (METHOD(_method, 1))
+            _result &= (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 >
+                       (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2;
           if (METHOD(_method, 2)) _result &= _indi[CURR].value[LINE_LOWER] > _indi[PREV].value[LINE_LOWER];
           if (METHOD(_method, 3)) _result &= _indi[CURR].value[LINE_UPPER] > _indi[PREV].value[LINE_UPPER];
-          if (METHOD(_method, 4)) _result &= _indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER] > _indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER];
+          if (METHOD(_method, 4))
+            _result &= _indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER] >
+                       _indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER];
           if (METHOD(_method, 5)) _result &= ask > (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2;
           if (METHOD(_method, 6)) _result &= Chart().GetClose() > _indi[CURR].value[LINE_UPPER];
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() < Close[PREV];
@@ -153,48 +156,16 @@ class Stg_Envelopes : public Strategy {
   }
 
   /**
-   * Check strategy's opening signal additional filter.
-   */
-  bool SignalOpenFilter(ENUM_ORDER_TYPE _cmd, int _method = 0) {
-    bool _result = true;
-    if (_method != 0) {
-      // if (METHOD(_method, 0)) _result &= Trade().IsTrend(_cmd);
-      // if (METHOD(_method, 1)) _result &= Trade().IsPivot(_cmd);
-      // if (METHOD(_method, 2)) _result &= Trade().IsPeakHours(_cmd);
-      // if (METHOD(_method, 3)) _result &= Trade().IsRoundNumber(_cmd);
-      // if (METHOD(_method, 4)) _result &= Trade().IsHedging(_cmd);
-      // if (METHOD(_method, 5)) _result &= Trade().IsPeakBar(_cmd);
-    }
-    return _result;
-  }
-
-  /**
-   * Gets strategy's lot size boost (when enabled).
-   */
-  double SignalOpenBoost(ENUM_ORDER_TYPE _cmd, int _method = 0) {
-    bool _result = 1.0;
-    if (_method != 0) {
-      // if (METHOD(_method, 0)) if (Trade().IsTrend(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 1)) if (Trade().IsPivot(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 2)) if (Trade().IsPeakHours(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 3)) if (Trade().IsRoundNumber(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 4)) if (Trade().IsHedging(_cmd)) _result *= 1.1;
-      // if (METHOD(_method, 5)) if (Trade().IsPeakBar(_cmd)) _result *= 1.1;
-    }
-    return _result;
-  }
-
-  /**
    * Check strategy's closing signal.
    */
-  bool SignalClose(ENUM_ORDER_TYPE _cmd, int _method = 0, double _level = 0.0) {
+  bool SignalClose(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0) {
     return SignalOpen(Order::NegateOrderType(_cmd), _method, _level);
   }
 
   /**
    * Gets price limit value for profit take or stop loss.
    */
-  double PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, double _level = 0.0) {
+  float PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
     Indi_Envelopes *_indi = Data();
     double _trail = _level * Market().GetPipSize();
     int _direction = Order::OrderDirection(_cmd, _mode);
@@ -207,19 +178,23 @@ class Stg_Envelopes : public Strategy {
     }
     switch (_method) {
       case 0: {
-        _result = (_direction > 0 ? _indi[CURR].value[LINE_UPPER] : _indi[CURR].value[LINE_LOWER]) + _trail * _direction;
+        _result =
+            (_direction > 0 ? _indi[CURR].value[LINE_UPPER] : _indi[CURR].value[LINE_LOWER]) + _trail * _direction;
         break;
       }
       case 1: {
-        _result = (_direction > 0 ? _indi[PREV].value[LINE_UPPER] : _indi[PREV].value[LINE_LOWER]) + _trail * _direction;
+        _result =
+            (_direction > 0 ? _indi[PREV].value[LINE_UPPER] : _indi[PREV].value[LINE_LOWER]) + _trail * _direction;
         break;
       }
       case 2: {
-        _result = (_direction > 0 ? _indi[PPREV].value[LINE_UPPER] : _indi[PPREV].value[LINE_LOWER]) + _trail * _direction;
+        _result =
+            (_direction > 0 ? _indi[PPREV].value[LINE_UPPER] : _indi[PPREV].value[LINE_LOWER]) + _trail * _direction;
         break;
       }
       case 3: {
-        _result = (_direction > 0 ? fmax(_indi[PREV].value[LINE_UPPER], _indi[PPREV].value[LINE_UPPER]) : fmin(_indi[PREV].value[LINE_LOWER], _indi[PPREV].value[LINE_LOWER])) +
+        _result = (_direction > 0 ? fmax(_indi[PREV].value[LINE_UPPER], _indi[PPREV].value[LINE_UPPER])
+                                  : fmin(_indi[PREV].value[LINE_LOWER], _indi[PPREV].value[LINE_LOWER])) +
                   _trail * _direction;
         break;
       }
@@ -236,8 +211,9 @@ class Stg_Envelopes : public Strategy {
         break;
       }
       case 7: {
-        int _bar_count = (int) _level * (int) _indi.GetMAPeriod();
-        _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count)) : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count));
+        int _bar_count = (int)_level * (int)_indi.GetMAPeriod();
+        _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count))
+                                 : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count));
         break;
       }
     }
