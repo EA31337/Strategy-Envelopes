@@ -3,67 +3,72 @@
  * Implements Envelopes strategy the Envelopes indicator.
  */
 
-// User input params.
-INPUT int Envelopes_MA_Period = 6;                     // Period
-INPUT float Envelopes_Deviation = 0.5;                 // Deviation for M1
-INPUT ENUM_MA_METHOD Envelopes_MA_Method = 3;          // MA Method
-INPUT int Envelopes_MA_Shift = 0;                      // MA Shift
-INPUT ENUM_APPLIED_PRICE Envelopes_Applied_Price = 3;  // Applied Price
-INPUT int Envelopes_Shift = 0;                         // Shift
-INPUT int Envelopes_SignalOpenMethod = 48;             // Signal open method (-127-127)
-INPUT float Envelopes_SignalOpenLevel = 0;             // Signal open level
-INPUT int Envelopes_SignalOpenFilterMethod = 0;        // Signal open filter method
-INPUT int Envelopes_SignalOpenBoostMethod = 0;         // Signal open filter method
-INPUT int Envelopes_SignalCloseMethod = 48;            // Signal close method (-127-127)
-INPUT float Envelopes_SignalCloseLevel = 0;            // Signal close level
-INPUT int Envelopes_PriceLimitMethod = 0;              // Price limit method
-INPUT float Envelopes_PriceLimitLevel = 0;             // Price limit level
-INPUT float Envelopes_MaxSpread = 6.0;                 // Max spread to trade (pips)
-
 // Includes.
 #include <EA31337-classes/Indicators/Indi_Envelopes.mqh>
 #include <EA31337-classes/Strategy.mqh>
 
+// User input params.
+INPUT float Envelopes_LotSize = 0;               // Lot size
+INPUT int Envelopes_SignalOpenMethod = 48;       // Signal open method (-127-127)
+INPUT float Envelopes_SignalOpenLevel = 0;       // Signal open level
+INPUT int Envelopes_SignalOpenFilterMethod = 0;  // Signal open filter method
+INPUT int Envelopes_SignalOpenBoostMethod = 0;   // Signal open filter method
+INPUT int Envelopes_SignalCloseMethod = 48;      // Signal close method (-127-127)
+INPUT float Envelopes_SignalCloseLevel = 0;      // Signal close level
+INPUT int Envelopes_PriceLimitMethod = 0;        // Price limit method
+INPUT float Envelopes_PriceLimitLevel = 0;       // Price limit level
+INPUT int Envelopes_TickFilterMethod = 0;        // Tick filter method
+INPUT float Envelopes_MaxSpread = 6.0;           // Max spread to trade (pips)
+INPUT int Envelopes_Shift = 0;                   // Shift
+INPUT string __Envelopes_Indi_Envelopes_Parameters__ =
+    "-- Envelopes strategy: Envelopes indicator params --";  // >>> Envelopes strategy: Envelopes indicator <<<
+INPUT int Indi_Envelopes_MA_Period = 6;                      // Period
+INPUT int Indi_Envelopes_MA_Shift = 0;                       // MA Shift
+INPUT ENUM_MA_METHOD Indi_Envelopes_MA_Method = 3;           // MA Method
+INPUT ENUM_APPLIED_PRICE Indi_Envelopes_Applied_Price = 3;   // Applied Price
+INPUT float Indi_Envelopes_Deviation = 0.5;                  // Deviation for M1
+
+// Structs.
+
+// Defines struct with default user indicator values.
+struct Indi_Envelopes_Params_Defaults : EnvelopesParams {
+  Indi_Envelopes_Params_Defaults()
+      : EnvelopesParams(::Indi_Envelopes_MA_Period, ::Indi_Envelopes_MA_Shift, ::Indi_Envelopes_MA_Method,
+                        ::Indi_Envelopes_Applied_Price, ::Indi_Envelopes_Deviation) {}
+} indi_envelopes_defaults;
+
+// Defines struct to store indicator parameter values.
+struct Indi_Envelopes_Params : public EnvelopesParams {
+  // Struct constructors.
+  void Indi_Envelopes_Params(EnvelopesParams &_params, ENUM_TIMEFRAMES _tf) : EnvelopesParams(_params, _tf) {}
+};
+
+// Defines struct with default user strategy values.
+struct Stg_Envelopes_Params_Defaults : StgParams {
+  Stg_Envelopes_Params_Defaults()
+      : StgParams(::Envelopes_SignalOpenMethod, ::Envelopes_SignalOpenFilterMethod, ::Envelopes_SignalOpenLevel,
+                  ::Envelopes_SignalOpenBoostMethod, ::Envelopes_SignalCloseMethod, ::Envelopes_SignalCloseLevel,
+                  ::Envelopes_PriceLimitMethod, ::Envelopes_PriceLimitLevel, ::Envelopes_TickFilterMethod,
+                  ::Envelopes_MaxSpread, ::Envelopes_Shift) {}
+} stg_envelopes_defaults;
+
 // Struct to define strategy parameters to override.
 struct Stg_Envelopes_Params : StgParams {
-  int Envelopes_MA_Period;
-  float Envelopes_Deviation;
-  ENUM_MA_METHOD Envelopes_MA_Method;
-  int Envelopes_MA_Shift;
-  ENUM_APPLIED_PRICE Envelopes_Applied_Price;
-  int Envelopes_Shift;
-  int Envelopes_SignalOpenMethod;
-  float Envelopes_SignalOpenLevel;
-  int Envelopes_SignalOpenFilterMethod;
-  int Envelopes_SignalOpenBoostMethod;
-  float Envelopes_SignalCloseLevel;
-  int Envelopes_SignalCloseMethod;
-  int Envelopes_PriceLimitMethod;
-  float Envelopes_PriceLimitLevel;
-  float Envelopes_MaxSpread;
+  Indi_Envelopes_Params iparams;
+  StgParams sparams;
 
-  // Constructor: Set default param values.
-  Stg_Envelopes_Params()
-      : Envelopes_MA_Period(::Envelopes_MA_Period),
-        Envelopes_Deviation(::Envelopes_Deviation),
-        Envelopes_MA_Method(::Envelopes_MA_Method),
-        Envelopes_MA_Shift(::Envelopes_MA_Shift),
-        Envelopes_Applied_Price(::Envelopes_Applied_Price),
-        Envelopes_Shift(::Envelopes_Shift),
-        Envelopes_SignalOpenMethod(::Envelopes_SignalOpenMethod),
-        Envelopes_SignalOpenLevel(::Envelopes_SignalOpenLevel),
-        Envelopes_SignalOpenFilterMethod(::Envelopes_SignalOpenFilterMethod),
-        Envelopes_SignalOpenBoostMethod(::Envelopes_SignalOpenBoostMethod),
-        Envelopes_SignalCloseMethod(::Envelopes_SignalCloseMethod),
-        Envelopes_SignalCloseLevel(::Envelopes_SignalCloseLevel),
-        Envelopes_PriceLimitMethod(::Envelopes_PriceLimitMethod),
-        Envelopes_PriceLimitLevel(::Envelopes_PriceLimitLevel),
-        Envelopes_MaxSpread(::Envelopes_MaxSpread) {}
+  // Struct constructors.
+  Stg_Envelopes_Params(Indi_Envelopes_Params &_iparams, StgParams &_sparams)
+      : iparams(indi_envelopes_defaults, _iparams.tf), sparams(stg_envelopes_defaults) {
+    iparams = _iparams;
+    sparams = _sparams;
+  }
 };
 
 // Loads pair specific param values.
 #include "sets/EURUSD_H1.h"
 #include "sets/EURUSD_H4.h"
+#include "sets/EURUSD_H8.h"
 #include "sets/EURUSD_M1.h"
 #include "sets/EURUSD_M15.h"
 #include "sets/EURUSD_M30.h"
@@ -75,25 +80,24 @@ class Stg_Envelopes : public Strategy {
 
   static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Stg_Envelopes_Params _params;
+    Indi_Envelopes_Params _indi_params(indi_envelopes_defaults, _tf);
+    StgParams _stg_params(stg_envelopes_defaults);
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Stg_Envelopes_Params>(_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1,
-                                          stg_env_h4, stg_env_h4);
+      SetParamsByTf<Indi_Envelopes_Params>(_indi_params, _tf, indi_envelopes_m1, indi_envelopes_m5, indi_envelopes_m15,
+                                           indi_envelopes_m30, indi_envelopes_h1, indi_envelopes_h4, indi_envelopes_h8);
+      SetParamsByTf<StgParams>(_stg_params, _tf, stg_envelopes_m1, stg_envelopes_m5, stg_envelopes_m15,
+                               stg_envelopes_m30, stg_envelopes_h1, stg_envelopes_h4, stg_envelopes_h8);
     }
+    // Initialize indicator.
+    EnvelopesParams env_params(_indi_params);
+    _stg_params.SetIndicator(new Indi_Envelopes(_indi_params));
     // Initialize strategy parameters.
-    EnvelopesParams env_params(_params.Envelopes_MA_Period, _params.Envelopes_MA_Shift, _params.Envelopes_MA_Method,
-                               _params.Envelopes_Applied_Price, _params.Envelopes_Deviation);
-    env_params.SetTf(_tf);
-    StgParams sparams(new Trade(_tf, _Symbol), new Indi_Envelopes(env_params), NULL, NULL);
-    sparams.logger.Ptr().SetLevel(_log_level);
-    sparams.SetMagicNo(_magic_no);
-    sparams.SetSignals(_params.Envelopes_SignalOpenMethod, _params.Envelopes_SignalOpenLevel,
-                       _params.Envelopes_SignalOpenFilterMethod, _params.Envelopes_SignalOpenBoostMethod,
-                       _params.Envelopes_SignalCloseMethod, _params.Envelopes_SignalCloseMethod);
-    sparams.SetPriceLimits(_params.Envelopes_PriceLimitMethod, _params.Envelopes_PriceLimitLevel);
-    sparams.SetMaxSpread(_params.Envelopes_MaxSpread);
+    _stg_params.GetLog().SetLevel(_log_level);
+    _stg_params.SetMagicNo(_magic_no);
+    _stg_params.SetTf(_tf, _Symbol);
     // Initialize strategy instance.
-    Strategy *_strat = new Stg_Envelopes(sparams, "Envelopes");
+    Strategy *_strat = new Stg_Envelopes(_stg_params, "Envelopes");
+    _stg_params.SetStops(_strat, _strat);
     return _strat;
   }
 

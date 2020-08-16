@@ -1,24 +1,27 @@
-//+------------------------------------------------------------------+
-//|                  EA31337 - multi-strategy advanced trading robot |
-//|                       Copyright 2016-2020, 31337 Investments Ltd |
-//|                                       https://github.com/EA31337 |
-//+------------------------------------------------------------------+
+/*
+ * @file
+ * Defines default strategy parameter values for the given timeframe.
+ */
+
+// Defines indicator's parameter values for the given pair symbol and timeframe.
+struct Indi_Envelopes_Params_M5 : Indi_Envelopes_Params {
+  Indi_Envelopes_Params_M5() : Indi_Envelopes_Params(indi_envelopes_defaults, PERIOD_M5) { shift = 0; }
+} indi_envelopes_m5;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct Stg_Envelopes_EURUSD_M5_Params : Stg_Envelopes_Params {
-  Stg_Envelopes_EURUSD_M5_Params() {
-    Envelopes_MA_Period = 6;
-    Envelopes_Deviation = 0.6f;
-    Envelopes_MA_Method = 0;
-    Envelopes_MA_Shift = 0;
-    Envelopes_Applied_Price = 3;
-    Envelopes_Shift = 0;
-    Envelopes_SignalOpenMethod = 0;
-    Envelopes_SignalOpenLevel = 0;
-    Envelopes_SignalCloseMethod = 0;
-    Envelopes_SignalCloseLevel = 0;
-    Envelopes_PriceLimitMethod = 0;
-    Envelopes_PriceLimitLevel = 0;
-    Envelopes_MaxSpread = 3;
+struct Stg_Envelopes_Params_M5 : StgParams {
+  // Struct constructor.
+  Stg_Envelopes_Params_M5() : StgParams(stg_envelopes_defaults) {
+    lot_size = 0;
+    signal_open_method = 0;
+    signal_open_filter = 1;
+    signal_open_level = 0;
+    signal_open_boost = 0;
+    signal_close_method = 0;
+    signal_close_level = 0;
+    price_limit_method = 0;
+    price_limit_level = 2;
+    tick_filter_method = 1;
+    max_spread = 0;
   }
-} stg_env_m5;
+} stg_envelopes_m5;

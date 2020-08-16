@@ -4,14 +4,14 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_Envelopes_Params_M15 : Indi_Envelopes_Params {
-  Indi_Envelopes_Params_M15() : Indi_Envelopes_Params(indi_envelopes_defaults, PERIOD_M15) { shift = 0; }
-} indi_envelopes_m15;
+struct Indi_Envelopes_Params_H8 : Indi_Envelopes_Params {
+  Indi_Envelopes_Params_H8() : Indi_Envelopes_Params(indi_envelopes_defaults, PERIOD_H8) { shift = 0; }
+} indi_envelopes_h8;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
-struct Stg_Envelopes_Params_M15 : StgParams {
+struct Stg_Envelopes_Params_H8 : StgParams {
   // Struct constructor.
-  Stg_Envelopes_Params_M15() : StgParams(stg_envelopes_defaults) {
+  Stg_Envelopes_Params_H8() : StgParams(stg_envelopes_defaults) {
     lot_size = 0;
     signal_open_method = 0;
     signal_open_filter = 1;
@@ -24,4 +24,4 @@ struct Stg_Envelopes_Params_M15 : StgParams {
     tick_filter_method = 1;
     max_spread = 0;
   }
-} stg_envelopes_m15;
+} stg_envelopes_h8;
