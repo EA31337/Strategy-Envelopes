@@ -15,8 +15,8 @@ INPUT int Envelopes_SignalOpenFilterMethod = 0;  // Signal open filter method
 INPUT int Envelopes_SignalOpenBoostMethod = 0;   // Signal open filter method
 INPUT int Envelopes_SignalCloseMethod = 48;      // Signal close method (-127-127)
 INPUT float Envelopes_SignalCloseLevel = 0;      // Signal close level
-INPUT int Envelopes_PriceLimitMethod = 0;        // Price limit method
-INPUT float Envelopes_PriceLimitLevel = 0;       // Price limit level
+INPUT int Envelopes_PriceStopMethod = 0;         // Price stop method
+INPUT float Envelopes_PriceStopLevel = 0;        // Price stop level
 INPUT int Envelopes_TickFilterMethod = 0;        // Tick filter method
 INPUT float Envelopes_MaxSpread = 6.0;           // Max spread to trade (pips)
 INPUT int Envelopes_Shift = 0;                   // Shift
@@ -48,7 +48,7 @@ struct Stg_Envelopes_Params_Defaults : StgParams {
   Stg_Envelopes_Params_Defaults()
       : StgParams(::Envelopes_SignalOpenMethod, ::Envelopes_SignalOpenFilterMethod, ::Envelopes_SignalOpenLevel,
                   ::Envelopes_SignalOpenBoostMethod, ::Envelopes_SignalCloseMethod, ::Envelopes_SignalCloseLevel,
-                  ::Envelopes_PriceLimitMethod, ::Envelopes_PriceLimitLevel, ::Envelopes_TickFilterMethod,
+                  ::Envelopes_PriceStopMethod, ::Envelopes_PriceStopLevel, ::Envelopes_TickFilterMethod,
                   ::Envelopes_MaxSpread, ::Envelopes_Shift) {}
 } stg_envelopes_defaults;
 
@@ -167,9 +167,9 @@ class Stg_Envelopes : public Strategy {
   }
 
   /**
-   * Gets price limit value for profit take or stop loss.
+   * Gets price stop value for profit take or stop loss.
    */
-  float PriceLimit(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
+  float PriceStop(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0) {
     Indi_Envelopes *_indi = Data();
     double _trail = _level * Market().GetPipSize();
     int _direction = Order::OrderDirection(_cmd, _mode);
