@@ -181,40 +181,40 @@ class Stg_Envelopes : public Strategy {
       return false;
     }
     switch (_method) {
-      case 0: {
+      case 1: {
         _result =
             (_direction > 0 ? _indi[CURR].value[LINE_UPPER] : _indi[CURR].value[LINE_LOWER]) + _trail * _direction;
         break;
       }
-      case 1: {
+      case 2: {
         _result =
             (_direction > 0 ? _indi[PREV].value[LINE_UPPER] : _indi[PREV].value[LINE_LOWER]) + _trail * _direction;
         break;
       }
-      case 2: {
+      case 3: {
         _result =
             (_direction > 0 ? _indi[PPREV].value[LINE_UPPER] : _indi[PPREV].value[LINE_LOWER]) + _trail * _direction;
         break;
       }
-      case 3: {
+      case 4: {
         _result = (_direction > 0 ? fmax(_indi[PREV].value[LINE_UPPER], _indi[PPREV].value[LINE_UPPER])
                                   : fmin(_indi[PREV].value[LINE_LOWER], _indi[PPREV].value[LINE_LOWER])) +
                   _trail * _direction;
         break;
       }
-      case 4: {
+      case 5: {
         _result = (_indi[CURR].value[LINE_UPPER] - _indi[CURR].value[LINE_LOWER]) / 2 + _trail * _direction;
         break;
       }
-      case 5: {
+      case 6: {
         _result = (_indi[PREV].value[LINE_UPPER] - _indi[PREV].value[LINE_LOWER]) / 2 + _trail * _direction;
         break;
       }
-      case 6: {
+      case 7: {
         _result = (_indi[PPREV].value[LINE_UPPER] - _indi[PPREV].value[LINE_LOWER]) / 2 + _trail * _direction;
         break;
       }
-      case 7: {
+      case 8: {
         int _bar_count = (int)_level * (int)_indi.GetMAPeriod();
         _result = _direction > 0 ? _indi.GetPrice(PRICE_HIGH, _indi.GetHighest(_bar_count))
                                  : _indi.GetPrice(PRICE_LOW, _indi.GetLowest(_bar_count));
