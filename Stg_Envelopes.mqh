@@ -3,10 +3,6 @@
  * Implements Envelopes strategy the Envelopes indicator.
  */
 
-// Includes.
-#include <EA31337-classes/Indicators/Indi_Envelopes.mqh>
-#include <EA31337-classes/Strategy.mqh>
-
 // User input params.
 INPUT float Envelopes_LotSize = 0;               // Lot size
 INPUT int Envelopes_SignalOpenMethod = 48;       // Signal open method (-127-127)
