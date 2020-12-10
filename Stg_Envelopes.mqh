@@ -114,40 +114,40 @@ class Stg_Envelopes : public Strategy {
     double bid = Chart().GetBid();
     switch (_cmd) {
       case ORDER_TYPE_BUY:
-        _result = Low[CURR] < _indi[CURR][LINE_LOWER] ||
-                  Low[PREV] < _indi[CURR][LINE_LOWER];  // price low was below the lower band
-        // _result = _result || (_indi[CURR]_main > _indi[PPREV]_main && Open[CURR] > _indi[CURR][LINE_UPPER]);
+        _result = Low[CURR] < _indi[CURR][(int)LINE_LOWER] ||
+                  Low[PREV] < _indi[CURR][(int)LINE_LOWER];  // price low was below the lower band
+        // _result = _result || (_indi[CURR]_main > _indi[PPREV]_main && Open[CURR] > _indi[CURR][(int)LINE_UPPER]);
         if (_method != 0) {
-          if (METHOD(_method, 0)) _result &= Chart().GetOpen() > _indi[CURR][LINE_LOWER];  // FIXME
+          if (METHOD(_method, 0)) _result &= Chart().GetOpen() > _indi[CURR][(int)LINE_LOWER];  // FIXME
           if (METHOD(_method, 1))
-            _result &= (_indi[CURR][LINE_UPPER] - _indi[CURR][LINE_LOWER]) / 2 <
-                       (_indi[PREV][LINE_UPPER] - _indi[PREV][LINE_LOWER]) / 2;
-          if (METHOD(_method, 2)) _result &= _indi[CURR][LINE_LOWER] < _indi[PREV][LINE_LOWER];
-          if (METHOD(_method, 3)) _result &= _indi[CURR][LINE_UPPER] < _indi[PREV][LINE_UPPER];
+            _result &= (_indi[CURR][(int)LINE_UPPER] - _indi[CURR][(int)LINE_LOWER]) / 2 <
+                       (_indi[PREV][(int)LINE_UPPER] - _indi[PREV][(int)LINE_LOWER]) / 2;
+          if (METHOD(_method, 2)) _result &= _indi[CURR][(int)LINE_LOWER] < _indi[PREV][(int)LINE_LOWER];
+          if (METHOD(_method, 3)) _result &= _indi[CURR][(int)LINE_UPPER] < _indi[PREV][(int)LINE_UPPER];
           if (METHOD(_method, 4))
-            _result &=
-                _indi[CURR][LINE_UPPER] - _indi[CURR][LINE_LOWER] > _indi[PREV][LINE_UPPER] - _indi[PREV][LINE_LOWER];
-          if (METHOD(_method, 5)) _result &= ask < (_indi[CURR][LINE_UPPER] - _indi[CURR][LINE_LOWER]) / 2;
-          if (METHOD(_method, 6)) _result &= Chart().GetClose() < _indi[CURR][LINE_UPPER];
+            _result &= _indi[CURR][(int)LINE_UPPER] - _indi[CURR][(int)LINE_LOWER] >
+                       _indi[PREV][(int)LINE_UPPER] - _indi[PREV][(int)LINE_LOWER];
+          if (METHOD(_method, 5)) _result &= ask < (_indi[CURR][(int)LINE_UPPER] - _indi[CURR][(int)LINE_LOWER]) / 2;
+          if (METHOD(_method, 6)) _result &= Chart().GetClose() < _indi[CURR][(int)LINE_UPPER];
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() > Close[PREV];
         }
         break;
       case ORDER_TYPE_SELL:
-        _result = High[CURR] > _indi[CURR][LINE_UPPER] ||
-                  High[PREV] > _indi[CURR][LINE_UPPER];  // price high was above the upper band
-        // _result = _result || (_indi[CURR]_main < _indi[PPREV]_main && Open[CURR] < _indi[CURR][LINE_LOWER]);
+        _result = High[CURR] > _indi[CURR][(int)LINE_UPPER] ||
+                  High[PREV] > _indi[CURR][(int)LINE_UPPER];  // price high was above the upper band
+        // _result = _result || (_indi[CURR]_main < _indi[PPREV]_main && Open[CURR] < _indi[CURR][(int)LINE_LOWER]);
         if (_method != 0) {
-          if (METHOD(_method, 0)) _result &= Chart().GetOpen() < _indi[CURR][LINE_UPPER];  // FIXME
+          if (METHOD(_method, 0)) _result &= Chart().GetOpen() < _indi[CURR][(int)LINE_UPPER];  // FIXME
           if (METHOD(_method, 1))
-            _result &= (_indi[CURR][LINE_UPPER] - _indi[CURR][LINE_LOWER]) / 2 >
-                       (_indi[PREV][LINE_UPPER] - _indi[PREV][LINE_LOWER]) / 2;
-          if (METHOD(_method, 2)) _result &= _indi[CURR][LINE_LOWER] > _indi[PREV][LINE_LOWER];
-          if (METHOD(_method, 3)) _result &= _indi[CURR][LINE_UPPER] > _indi[PREV][LINE_UPPER];
+            _result &= (_indi[CURR][(int)LINE_UPPER] - _indi[CURR][(int)LINE_LOWER]) / 2 >
+                       (_indi[PREV][(int)LINE_UPPER] - _indi[PREV][(int)LINE_LOWER]) / 2;
+          if (METHOD(_method, 2)) _result &= _indi[CURR][(int)LINE_LOWER] > _indi[PREV][(int)LINE_LOWER];
+          if (METHOD(_method, 3)) _result &= _indi[CURR][(int)LINE_UPPER] > _indi[PREV][(int)LINE_UPPER];
           if (METHOD(_method, 4))
-            _result &=
-                _indi[CURR][LINE_UPPER] - _indi[CURR][LINE_LOWER] > _indi[PREV][LINE_UPPER] - _indi[PREV][LINE_LOWER];
-          if (METHOD(_method, 5)) _result &= ask > (_indi[CURR][LINE_UPPER] - _indi[CURR][LINE_LOWER]) / 2;
-          if (METHOD(_method, 6)) _result &= Chart().GetClose() > _indi[CURR][LINE_UPPER];
+            _result &= _indi[CURR][(int)LINE_UPPER] - _indi[CURR][(int)LINE_LOWER] >
+                       _indi[PREV][(int)LINE_UPPER] - _indi[PREV][(int)LINE_LOWER];
+          if (METHOD(_method, 5)) _result &= ask > (_indi[CURR][(int)LINE_UPPER] - _indi[CURR][(int)LINE_LOWER]) / 2;
+          if (METHOD(_method, 6)) _result &= Chart().GetClose() > _indi[CURR][(int)LINE_UPPER];
           // if (METHOD(_method, 7)) _result &= _chart.GetAsk() < Close[PREV];
         }
         break;
@@ -178,33 +178,34 @@ class Stg_Envelopes : public Strategy {
     }
     switch (_method) {
       case 1: {
-        _result = (_direction > 0 ? _indi[CURR][LINE_UPPER] : _indi[CURR][LINE_LOWER]) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[CURR][(int)LINE_UPPER] : _indi[CURR][(int)LINE_LOWER]) + _trail * _direction;
         break;
       }
       case 2: {
-        _result = (_direction > 0 ? _indi[PREV][LINE_UPPER] : _indi[PREV][LINE_LOWER]) + _trail * _direction;
+        _result = (_direction > 0 ? _indi[PREV][(int)LINE_UPPER] : _indi[PREV][(int)LINE_LOWER]) + _trail * _direction;
         break;
       }
       case 3: {
-        _result = (_direction > 0 ? _indi[PPREV][LINE_UPPER] : _indi[PPREV][LINE_LOWER]) + _trail * _direction;
+        _result =
+            (_direction > 0 ? _indi[PPREV][(int)LINE_UPPER] : _indi[PPREV][(int)LINE_LOWER]) + _trail * _direction;
         break;
       }
       case 4: {
-        _result = (_direction > 0 ? fmax(_indi[PREV][LINE_UPPER], _indi[PPREV][LINE_UPPER])
-                                  : fmin(_indi[PREV][LINE_LOWER], _indi[PPREV][LINE_LOWER])) +
+        _result = (_direction > 0 ? fmax(_indi[PREV][(int)LINE_UPPER], _indi[PPREV][(int)LINE_UPPER])
+                                  : fmin(_indi[PREV][(int)LINE_LOWER], _indi[PPREV][(int)LINE_LOWER])) +
                   _trail * _direction;
         break;
       }
       case 5: {
-        _result = (_indi[CURR][LINE_UPPER] - _indi[CURR][LINE_LOWER]) / 2 + _trail * _direction;
+        _result = (_indi[CURR][(int)LINE_UPPER] - _indi[CURR][(int)LINE_LOWER]) / 2 + _trail * _direction;
         break;
       }
       case 6: {
-        _result = (_indi[PREV][LINE_UPPER] - _indi[PREV][LINE_LOWER]) / 2 + _trail * _direction;
+        _result = (_indi[PREV][(int)LINE_UPPER] - _indi[PREV][(int)LINE_LOWER]) / 2 + _trail * _direction;
         break;
       }
       case 7: {
-        _result = (_indi[PPREV][LINE_UPPER] - _indi[PPREV][LINE_LOWER]) / 2 + _trail * _direction;
+        _result = (_indi[PPREV][(int)LINE_UPPER] - _indi[PPREV][(int)LINE_LOWER]) / 2 + _trail * _direction;
         break;
       }
       case 8: {
