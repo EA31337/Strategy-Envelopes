@@ -1,0 +1,7 @@
+; Optimize signal close method param.
+Envelopes_SignalCloseMethod,1=-4
+Envelopes_SignalCloseMethod,2=1
+Envelopes_SignalCloseMethod,3=4
+Envelopes_SignalCloseMethod,F=1
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_TickFilterMethod=1

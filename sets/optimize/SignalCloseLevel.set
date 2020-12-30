@@ -1,0 +1,7 @@
+; Optimize signal close level param.
+Envelopes_SignalCloseLevel,1=10
+Envelopes_SignalCloseLevel,2=5
+Envelopes_SignalCloseLevel,3=40
+Envelopes_SignalCloseLevel,F=1
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_TickFilterMethod=1

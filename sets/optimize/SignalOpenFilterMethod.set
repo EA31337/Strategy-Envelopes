@@ -1,0 +1,6 @@
+; Optimize signal open filter method param.
+Envelopes_SignalOpenFilterMethod,1=0
+Envelopes_SignalOpenFilterMethod,2=9
+Envelopes_SignalOpenFilterMethod,3=49
+Envelopes_SignalOpenFilterMethod,F=1
+Envelopes_TickFilterMethod=1

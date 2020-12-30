@@ -1,0 +1,8 @@
+; Optimize price stop method param.
+Envelopes_PriceStopMethod,1=0
+Envelopes_PriceStopMethod,2=1
+Envelopes_PriceStopMethod,3=4
+Envelopes_PriceStopMethod,F=1
+Envelopes_OrderCloseTime=-20
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_TickFilterMethod=1

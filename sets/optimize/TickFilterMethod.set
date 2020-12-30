@@ -1,0 +1,6 @@
+; Optimize tick filter method param.
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_TickFilterMethod,1=1
+Envelopes_TickFilterMethod,2=1
+Envelopes_TickFilterMethod,3=32
+Envelopes_TickFilterMethod,F=1

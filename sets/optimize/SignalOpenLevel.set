@@ -1,0 +1,7 @@
+; Optimize signal open level param.
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_SignalOpenLevel,1=0
+Envelopes_SignalOpenLevel,2=1
+Envelopes_SignalOpenLevel,3=10
+Envelopes_SignalOpenLevel,F=1
+Envelopes_TickFilterMethod=1
