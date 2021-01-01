@@ -1,0 +1,7 @@
+; Optimize strategy indicator's Envelopes applied price param.
+Envelopes_Indi_Envelopes_Applied_Price,1=0
+Envelopes_Indi_Envelopes_Applied_Price,2=0
+Envelopes_Indi_Envelopes_Applied_Price,3=6
+Envelopes_Indi_Envelopes_Applied_Price,F=1
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_TickFilterMethod=1

@@ -1,0 +1,7 @@
+; Optimize strategy indicator's Envelopes params.
+Envelopes_Indi_Envelopes_MA_Method,1=0
+Envelopes_Indi_Envelopes_MA_Method,2=1
+Envelopes_Indi_Envelopes_MA_Method,3=3
+Envelopes_Indi_Envelopes_MA_Method,F=1
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_TickFilterMethod=1

@@ -5,7 +5,14 @@
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
 struct Indi_Envelopes_Params_H1 : Indi_Envelopes_Params {
-  Indi_Envelopes_Params_H1() : Indi_Envelopes_Params(indi_envelopes_defaults, PERIOD_H1) { shift = 0; }
+  Indi_Envelopes_Params_H1() : Indi_Envelopes_Params(indi_envelopes_defaults, PERIOD_H1) {
+    applied_price = (ENUM_APPLIED_PRICE)0;
+    deviation = 0.5;
+    ma_method = 3;
+    ma_period = 24;
+    ma_shift = 0;
+    shift = 0;
+  }
 } indi_envelopes_h1;
 
 // Defines strategy's parameter values for the given pair symbol and timeframe.
