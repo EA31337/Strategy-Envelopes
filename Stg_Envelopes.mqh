@@ -5,18 +5,18 @@
 
 // User input params.
 INPUT float Envelopes_LotSize = 0;               // Lot size
-INPUT int Envelopes_SignalOpenMethod = 48;       // Signal open method (-127-127)
-INPUT float Envelopes_SignalOpenLevel = 0;       // Signal open level
-INPUT int Envelopes_SignalOpenFilterMethod = 0;  // Signal open filter method
+INPUT int Envelopes_SignalOpenMethod = 0;        // Signal open method (-127-127)
+INPUT float Envelopes_SignalOpenLevel = 0.0f;    // Signal open level
+INPUT int Envelopes_SignalOpenFilterMethod = 1;  // Signal open filter method
 INPUT int Envelopes_SignalOpenBoostMethod = 0;   // Signal open filter method
 INPUT int Envelopes_SignalCloseMethod = 48;      // Signal close method (-127-127)
-INPUT float Envelopes_SignalCloseLevel = 0;      // Signal close level
+INPUT float Envelopes_SignalCloseLevel = 0.0f;   // Signal close level
 INPUT int Envelopes_PriceStopMethod = 0;         // Price stop method
 INPUT float Envelopes_PriceStopLevel = 0;        // Price stop level
-INPUT int Envelopes_TickFilterMethod = 0;        // Tick filter method
-INPUT float Envelopes_MaxSpread = 6.0;           // Max spread to trade (pips)
+INPUT int Envelopes_TickFilterMethod = 1;        // Tick filter method
+INPUT float Envelopes_MaxSpread = 4.0;           // Max spread to trade (pips)
 INPUT int Envelopes_Shift = 0;                   // Shift
-INPUT int Envelopes_OrderCloseTime = -10;        // Order close time in mins (>0) or bars (<0)
+INPUT int Envelopes_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 INPUT string __Envelopes_Indi_Envelopes_Parameters__ =
     "-- Envelopes strategy: Envelopes indicator params --";  // >>> Envelopes strategy: Envelopes indicator <<<
 INPUT int Indi_Envelopes_MA_Period = 6;                      // Period
