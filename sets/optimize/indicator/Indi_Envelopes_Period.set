@@ -1,0 +1,7 @@
+; Optimize strategy indicator's Envelopes period param.
+Envelopes_Indi_Envelopes_Period,1=4
+Envelopes_Indi_Envelopes_Period,2=4
+Envelopes_Indi_Envelopes_Period,3=24
+Envelopes_Indi_Envelopes_Period,F=1
+Envelopes_SignalOpenFilterMethod=1
+Envelopes_TickFilterMethod=1
