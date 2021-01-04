@@ -21,10 +21,10 @@ struct Stg_Envelopes_Params_{{ Timeframe }} : StgParams {
     lot_size = {{ Envelopes_LotSize | default(0) }};
     signal_open_method = {{ Envelopes_SignalOpenMethod | default(0) }};
     signal_open_filter = {{ Envelopes_SignalOpenFilterMethod | default(1) }};
-    signal_open_level = {{ Envelopes_SignalOpenLevel | default(0) }};
+    signal_open_level = (float){{ Envelopes_SignalOpenLevel | default(0) }};
     signal_open_boost = {{ Envelopes_SignalOpenBoostMethod | default(0) }};
     signal_close_method = {{ Envelopes_SignalCloseMethod | default(0) }};
-    signal_close_level = {{ Envelopes_SignalCloseLevel | default(0) }};
+    signal_close_level = (float){{ Envelopes_SignalCloseLevel | default(0) }};
     price_stop_method = {{ Envelopes_PriceStopMethod | default(0) }};
     price_stop_level = {{ Envelopes_SignalCloseLevel | default(1) }};
     tick_filter_method = {{ Envelopes_TickFilterMethod  | default(1) }};
