@@ -1,7 +1,7 @@
 Envelopes_Indi_Envelopes_Applied_Price={{ applied_price | replace("(ENUM_APPLIED_PRICE)", "") | int | default(0) }}
 Envelopes_Indi_Envelopes_Deviation={{ deviation | default(0.1) }}
 Envelopes_Indi_Envelopes_MA_Method={{ ma_method | default(0) }}
-Envelopes_Indi_Envelopes_MA_Period={{ ma_period | default(4) }}
+Envelopes_Indi_Envelopes_MA_Period={{ (ma_period | default(0) | int) }}
 Envelopes_Indi_Envelopes_MA_Shift,1=0
 Envelopes_Indi_Envelopes_MA_Shift,2=1
 Envelopes_Indi_Envelopes_MA_Shift,3=6
