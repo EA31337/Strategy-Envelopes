@@ -33,7 +33,7 @@ struct Indi_Envelopes_Params_Defaults : EnvelopesParams {
       : EnvelopesParams(::Envelopes_Indi_Envelopes_MA_Period, ::Envelopes_Indi_Envelopes_MA_Shift,
                         ::Envelopes_Indi_Envelopes_MA_Method, ::Envelopes_Indi_Envelopes_Applied_Price,
                         ::Envelopes_Indi_Envelopes_Deviation) {}
-} indi_envelopes_defaults;
+} indi_env_defaults;
 
 // Defines struct to store indicator parameter values.
 struct Indi_Envelopes_Params : public EnvelopesParams {
@@ -48,7 +48,7 @@ struct Stg_Envelopes_Params_Defaults : StgParams {
                   ::Envelopes_SignalOpenBoostMethod, ::Envelopes_SignalCloseMethod, ::Envelopes_SignalCloseLevel,
                   ::Envelopes_PriceStopMethod, ::Envelopes_PriceStopLevel, ::Envelopes_TickFilterMethod,
                   ::Envelopes_MaxSpread, ::Envelopes_Shift, ::Envelopes_OrderCloseTime) {}
-} stg_envelopes_defaults;
+} stg_env_defaults;
 
 // Struct to define strategy parameters to override.
 struct Stg_Envelopes_Params : StgParams {
@@ -57,7 +57,7 @@ struct Stg_Envelopes_Params : StgParams {
 
   // Struct constructors.
   Stg_Envelopes_Params(Indi_Envelopes_Params &_iparams, StgParams &_sparams)
-      : iparams(indi_envelopes_defaults, _iparams.tf), sparams(stg_envelopes_defaults) {
+      : iparams(indi_env_defaults, _iparams.tf), sparams(stg_env_defaults) {
     iparams = _iparams;
     sparams = _sparams;
   }
@@ -78,13 +78,13 @@ class Stg_Envelopes : public Strategy {
 
   static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Indi_Envelopes_Params _indi_params(indi_envelopes_defaults, _tf);
-    StgParams _stg_params(stg_envelopes_defaults);
+    Indi_Envelopes_Params _indi_params(indi_env_defaults, _tf);
+    StgParams _stg_params(stg_env_defaults);
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Indi_Envelopes_Params>(_indi_params, _tf, indi_envelopes_m1, indi_envelopes_m5, indi_envelopes_m15,
-                                           indi_envelopes_m30, indi_envelopes_h1, indi_envelopes_h4, indi_envelopes_h8);
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_envelopes_m1, stg_envelopes_m5, stg_envelopes_m15,
-                               stg_envelopes_m30, stg_envelopes_h1, stg_envelopes_h4, stg_envelopes_h8);
+      SetParamsByTf<Indi_Envelopes_Params>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30,
+                                           indi_env_h1, indi_env_h4, indi_env_h8);
+      SetParamsByTf<StgParams>(_stg_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1,
+                               stg_env_h4, stg_env_h8);
     }
     // Initialize indicator.
     EnvelopesParams env_params(_indi_params);
