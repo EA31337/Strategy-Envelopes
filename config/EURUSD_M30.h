@@ -10,6 +10,7 @@ struct Indi_Envelopes_Params_M30 : Indi_Envelopes_Params {
     deviation = 0.1;
     ma_method = 0;
     ma_period = 16;
+    ma_shift = 0;
     shift = 0;
   }
 } indi_env_m30;

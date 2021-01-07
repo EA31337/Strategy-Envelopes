@@ -9,7 +9,7 @@ INPUT int Envelopes_SignalOpenMethod = 0;        // Signal open method (-127-127
 INPUT float Envelopes_SignalOpenLevel = 0.0f;    // Signal open level
 INPUT int Envelopes_SignalOpenFilterMethod = 1;  // Signal open filter method
 INPUT int Envelopes_SignalOpenBoostMethod = 0;   // Signal open filter method
-INPUT int Envelopes_SignalCloseMethod = 48;      // Signal close method (-127-127)
+INPUT int Envelopes_SignalCloseMethod = 0;       // Signal close method (-127-127)
 INPUT float Envelopes_SignalCloseLevel = 0.0f;   // Signal close level
 INPUT int Envelopes_PriceStopMethod = 0;         // Price stop method
 INPUT float Envelopes_PriceStopLevel = 0;        // Price stop level
@@ -19,11 +19,12 @@ INPUT int Envelopes_Shift = 0;                   // Shift
 INPUT int Envelopes_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 INPUT string __Envelopes_Indi_Envelopes_Parameters__ =
     "-- Envelopes strategy: Envelopes indicator params --";           // >>> Envelopes strategy: Envelopes indicator <<<
-INPUT int Envelopes_Indi_Envelopes_MA_Period = 24;                    // Period
+INPUT int Envelopes_Indi_Envelopes_MA_Period = 14;                    // Period
 INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;                      // MA Shift
 INPUT ENUM_MA_METHOD Envelopes_Indi_Envelopes_MA_Method = 3;          // MA Method
 INPUT ENUM_APPLIED_PRICE Envelopes_Indi_Envelopes_Applied_Price = 3;  // Applied Price
 INPUT float Envelopes_Indi_Envelopes_Deviation = 0.5;                 // Deviation for M1
+INPUT int Envelopes_Indi_Envelopes_Shift = 0;                         // Shift
 
 // Structs.
 
@@ -32,7 +33,7 @@ struct Indi_Envelopes_Params_Defaults : EnvelopesParams {
   Indi_Envelopes_Params_Defaults()
       : EnvelopesParams(::Envelopes_Indi_Envelopes_MA_Period, ::Envelopes_Indi_Envelopes_MA_Shift,
                         ::Envelopes_Indi_Envelopes_MA_Method, ::Envelopes_Indi_Envelopes_Applied_Price,
-                        ::Envelopes_Indi_Envelopes_Deviation) {}
+                        ::Envelopes_Indi_Envelopes_Deviation, ::Envelopes_Indi_Envelopes_Shift) {}
 } indi_env_defaults;
 
 // Defines struct to store indicator parameter values.
