@@ -27,7 +27,7 @@ struct Stg_Envelopes_Params_{{ Timeframe }} : StgParams {
     signal_close_method = {{ Envelopes_SignalCloseMethod | default(0) }};
     signal_close_level = (float){{ Envelopes_SignalCloseLevel | default(0) }};
     price_stop_method = {{ Envelopes_PriceStopMethod | default(0) }};
-    price_stop_level = {{ Envelopes_SignalCloseLevel | default(1) }};
+    price_stop_level = (float){{ Envelopes_SignalCloseLevel | default(1) }};
     tick_filter_method = {{ Envelopes_TickFilterMethod  | default(1) }};
     max_spread = {{ Envelopes_MaxSpread | default(0) }};
   }
