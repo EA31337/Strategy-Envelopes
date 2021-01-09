@@ -9,7 +9,7 @@ struct Indi_Envelopes_Params_M5 : Indi_Envelopes_Params {
     applied_price = (ENUM_APPLIED_PRICE)5;
     deviation = 0.1;
     ma_method = 1;
-    ma_period = 14;
+    ma_period = 24;
     ma_shift = 0;
     shift = 0;
   }
