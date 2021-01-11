@@ -4,8 +4,8 @@
  */
 
 // Defines indicator's parameter values for the given pair symbol and timeframe.
-struct Indi_Envelopes_Params_H8 : Indi_Envelopes_Params {
-  Indi_Envelopes_Params_H8() : Indi_Envelopes_Params(indi_env_defaults, PERIOD_H8) {
+struct Indi_Envelopes_Params_H8 : EnvelopesParams {
+  Indi_Envelopes_Params_H8() : EnvelopesParams(indi_env_defaults, PERIOD_H8) {
     applied_price = (ENUM_APPLIED_PRICE)0;
     deviation = 0.5;
     ma_method = 3;

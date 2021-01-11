@@ -36,12 +36,6 @@ struct Indi_Envelopes_Params_Defaults : EnvelopesParams {
                         ::Envelopes_Indi_Envelopes_Deviation, ::Envelopes_Indi_Envelopes_Shift) {}
 } indi_env_defaults;
 
-// Defines struct to store indicator parameter values.
-struct Indi_Envelopes_Params : public EnvelopesParams {
-  // Struct constructors.
-  void Indi_Envelopes_Params(EnvelopesParams &_params, ENUM_TIMEFRAMES _tf) : EnvelopesParams(_params, _tf) {}
-};
-
 // Defines struct with default user strategy values.
 struct Stg_Envelopes_Params_Defaults : StgParams {
   Stg_Envelopes_Params_Defaults()
@@ -53,11 +47,11 @@ struct Stg_Envelopes_Params_Defaults : StgParams {
 
 // Struct to define strategy parameters to override.
 struct Stg_Envelopes_Params : StgParams {
-  Indi_Envelopes_Params iparams;
+  EnvelopesParams iparams;
   StgParams sparams;
 
   // Struct constructors.
-  Stg_Envelopes_Params(Indi_Envelopes_Params &_iparams, StgParams &_sparams)
+  Stg_Envelopes_Params(EnvelopesParams &_iparams, StgParams &_sparams)
       : iparams(indi_env_defaults, _iparams.tf), sparams(stg_env_defaults) {
     iparams = _iparams;
     sparams = _sparams;
@@ -79,11 +73,11 @@ class Stg_Envelopes : public Strategy {
 
   static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL, long _magic_no = NULL, ENUM_LOG_LEVEL _log_level = V_INFO) {
     // Initialize strategy initial values.
-    Indi_Envelopes_Params _indi_params(indi_env_defaults, _tf);
+    EnvelopesParams _indi_params(indi_env_defaults, _tf);
     StgParams _stg_params(stg_env_defaults);
     if (!Terminal::IsOptimization()) {
-      SetParamsByTf<Indi_Envelopes_Params>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30,
-                                           indi_env_h1, indi_env_h4, indi_env_h8);
+      SetParamsByTf<EnvelopesParams>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30,
+                                     indi_env_h1, indi_env_h4, indi_env_h8);
       SetParamsByTf<StgParams>(_stg_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1,
                                stg_env_h4, stg_env_h8);
     }
