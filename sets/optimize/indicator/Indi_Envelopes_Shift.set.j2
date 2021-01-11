@@ -1,15 +1,7 @@
-Envelopes_Indi_Envelopes_Applied_Price={{ applied_price | replace("(ENUM_APPLIED_PRICE)", "") | int | default(0) }}
-Envelopes_Indi_Envelopes_Deviation={{ deviation | default(0.1) }}
-Envelopes_Indi_Envelopes_MA_Method={{ ma_method | default(0) }}
-Envelopes_Indi_Envelopes_MA_Period={{ (ma_period | default(0) | int) }}
-Envelopes_Indi_Envelopes_MA_Shift={{ ma_shift | default(0) }}
 Envelopes_Indi_Envelopes_Shift,1=0
 Envelopes_Indi_Envelopes_Shift,2=1
-Envelopes_Indi_Envelopes_Shift,3=5
+Envelopes_Indi_Envelopes_Shift,3=4
 Envelopes_Indi_Envelopes_Shift,F=1
-Envelopes_Indi_Envelopes_Shift={{ shift | default(0) }}
-Envelopes_LotSize={{ lot_size | default(0) }}
-Envelopes_PriceStopMethod=0
+Envelopes_Indi_Envelopes_Shift={{ (shift | default(0) | int) }}
 Envelopes_SignalOpenFilterMethod=1
-Envelopes_SignalOpenLevel={{ signal_open_level | replace("(float)", "") | float | default(0) }}
 Envelopes_TickFilterMethod=1
