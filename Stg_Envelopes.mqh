@@ -18,13 +18,13 @@ INPUT float Envelopes_MaxSpread = 4.0;           // Max spread to trade (pips)
 INPUT int Envelopes_Shift = 0;                   // Shift
 INPUT int Envelopes_OrderCloseTime = -20;        // Order close time in mins (>0) or bars (<0)
 INPUT string __Envelopes_Indi_Envelopes_Parameters__ =
-    "-- Envelopes strategy: Envelopes indicator params --";           // >>> Envelopes strategy: Envelopes indicator <<<
-INPUT int Envelopes_Indi_Envelopes_MA_Period = 14;                    // Period
-INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;                      // MA Shift
-INPUT ENUM_MA_METHOD Envelopes_Indi_Envelopes_MA_Method = 3;          // MA Method
-INPUT ENUM_APPLIED_PRICE Envelopes_Indi_Envelopes_Applied_Price = 3;  // Applied Price
-INPUT float Envelopes_Indi_Envelopes_Deviation = 0.5;                 // Deviation for M1
-INPUT int Envelopes_Indi_Envelopes_Shift = 0;                         // Shift
+    "-- Envelopes strategy: Envelopes indicator params --";  // >>> Envelopes strategy: Envelopes indicator <<<
+INPUT int Envelopes_Indi_Envelopes_MA_Period = 14;           // Period
+INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;             // MA Shift
+INPUT ENUM_MA_METHOD Envelopes_Indi_Envelopes_MA_Method = (ENUM_MA_METHOD)3;              // MA Method
+INPUT ENUM_APPLIED_PRICE Envelopes_Indi_Envelopes_Applied_Price = (ENUM_APPLIED_PRICE)3;  // Applied Price
+INPUT float Envelopes_Indi_Envelopes_Deviation = 0.5;                                     // Deviation for M1
+INPUT int Envelopes_Indi_Envelopes_Shift = 0;                                             // Shift
 
 // Structs.
 
