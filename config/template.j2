@@ -8,7 +8,7 @@ struct Indi_Envelopes_Params_{{ Timeframe }} : EnvelopesParams {
   Indi_Envelopes_Params_{{ Timeframe }}() : EnvelopesParams(indi_env_defaults, PERIOD_{{ Timeframe }}) {
     applied_price = (ENUM_APPLIED_PRICE){{ Envelopes_Indi_Envelopes_Applied_Price | default(0) }};
     deviation = {{ Envelopes_Indi_Envelopes_Deviation | default(0) }};
-    ma_method = {{ Envelopes_Indi_Envelopes_MA_Method | default(0) }};
+    ma_method = (ENUM_MA_METHOD){{ Envelopes_Indi_Envelopes_MA_Method | default(0) }};
     ma_period = {{ Envelopes_Indi_Envelopes_MA_Period | default(0) }};
     ma_shift = {{ Envelopes_MA_Shift | default(0) }};
     shift = {{ Envelopes_Shift | default(0) }};
