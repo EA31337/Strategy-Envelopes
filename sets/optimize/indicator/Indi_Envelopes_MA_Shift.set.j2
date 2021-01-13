@@ -11,5 +11,5 @@ Envelopes_Indi_Envelopes_Shift={{ shift | default(0) }}
 Envelopes_LotSize={{ lot_size | default(0) }}
 Envelopes_PriceStopMethod=0
 Envelopes_SignalOpenFilterMethod=1
-Envelopes_SignalOpenLevel={{ (signal_open_level | default(0) | replace("(float)", "") | float) }}
+Envelopes_SignalOpenLevel={{ signal_open_level | default(0) | float }}
 Envelopes_TickFilterMethod=1
