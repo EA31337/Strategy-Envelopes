@@ -10,8 +10,8 @@ struct Indi_Envelopes_Params_{{ Timeframe }} : EnvelopesParams {
     deviation = {{ Envelopes_Indi_Envelopes_Deviation | default(0) }};
     ma_method = (ENUM_MA_METHOD){{ Envelopes_Indi_Envelopes_MA_Method | default(0) }};
     ma_period = {{ Envelopes_Indi_Envelopes_MA_Period | default(0) }};
-    ma_shift = {{ Envelopes_MA_Shift | default(0) }};
-    shift = {{ Envelopes_Shift | default(0) }};
+    ma_shift = {{ Envelopes_Indi_Envelopes_MA_Shift | default(0) }};
+    shift = {{ Envelopes_Indi_Envelopes_Shift | default(0) }};
   }
 } indi_env_{{ Timeframe | lower }};
 
