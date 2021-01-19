@@ -115,7 +115,7 @@ jobs:
         with:
           BtDeposit: 100000
           BtDest: ${{ github.workspace }}/_results
-          BtMonths: 11-12
+          BtMonths: 10-12
           BtPair: ${{ matrix.pair }}
           BtYears: 2019
           OptFormatBrief: true
