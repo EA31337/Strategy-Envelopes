@@ -6,10 +6,10 @@
 // Defines indicator's parameter values for the given pair symbol and timeframe.
 struct Indi_Envelopes_Params_M30 : EnvelopesParams {
   Indi_Envelopes_Params_M30() : EnvelopesParams(indi_env_defaults, PERIOD_M30) {
-    applied_price = (ENUM_APPLIED_PRICE)0;
+    applied_price = (ENUM_APPLIED_PRICE)2;
     deviation = 0.1;
-    ma_method = (ENUM_MA_METHOD)0;
-    ma_period = 20;
+    ma_method = (ENUM_MA_METHOD)2;
+    ma_period = 15;
     ma_shift = 3;
     shift = 0;
   }
