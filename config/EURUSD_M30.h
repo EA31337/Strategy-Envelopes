@@ -9,8 +9,8 @@ struct Indi_Envelopes_Params_M30 : EnvelopesParams {
     applied_price = (ENUM_APPLIED_PRICE)0;
     deviation = 0.1;
     ma_method = (ENUM_MA_METHOD)0;
-    ma_period = 10;
-    ma_shift = 0;
+    ma_period = 20;
+    ma_shift = 3;
     shift = 0;
   }
 } indi_env_m30;
