@@ -8,9 +8,9 @@ struct Indi_Envelopes_Params_M1 : EnvelopesParams {
   Indi_Envelopes_Params_M1() : EnvelopesParams(indi_env_defaults, PERIOD_M1) {
     applied_price = (ENUM_APPLIED_PRICE)2;
     deviation = 0.03;
-    ma_method = (ENUM_MA_METHOD)3;
+    ma_method = (ENUM_MA_METHOD)2;
     ma_period = 9;
-    ma_shift = 5;
+    ma_shift = 2;
     shift = 0;
   }
 } indi_env_m1;
