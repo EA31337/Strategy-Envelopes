@@ -76,12 +76,12 @@ class Stg_Envelopes : public Strategy {
     // Initialize strategy initial values.
     EnvelopesParams _indi_params(indi_env_defaults, _tf);
     StgParams _stg_params(stg_env_defaults);
-    if (!Terminal::IsOptimization()) {
-      SetParamsByTf<EnvelopesParams>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30,
-                                     indi_env_h1, indi_env_h4, indi_env_h8);
-      SetParamsByTf<StgParams>(_stg_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1,
-                               stg_env_h4, stg_env_h8);
-    }
+#ifdef __config__
+    SetParamsByTf<EnvelopesParams>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30, indi_env_h1,
+                                   indi_env_h4, indi_env_h8);
+    SetParamsByTf<StgParams>(_stg_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1, stg_env_h4,
+                             stg_env_h8);
+#endif
     // Initialize indicator.
     EnvelopesParams env_params(_indi_params);
     _stg_params.SetIndicator(new Indi_Envelopes(_indi_params));
