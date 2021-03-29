@@ -16,7 +16,7 @@ INPUT int Envelopes_PriceStopMethod = 0;                                    // P
 INPUT float Envelopes_PriceStopLevel = 0;                                   // Price stop level
 INPUT int Envelopes_TickFilterMethod = 1;                                   // Tick filter method
 INPUT float Envelopes_MaxSpread = 4.0;                                      // Max spread to trade (pips)
-INPUT int Envelopes_Shift = 0;                                              // Shift
+INPUT short Envelopes_Shift = 0;                                            // Shift
 INPUT int Envelopes_OrderCloseTime = -20;  // Order close time in mins (>0) or bars (<0)
 INPUT string __Envelopes_Indi_Envelopes_Parameters__ =
     "-- Envelopes strategy: Envelopes indicator params --";  // >>> Envelopes strategy: Envelopes indicator <<<
