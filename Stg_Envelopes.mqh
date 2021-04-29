@@ -53,7 +53,7 @@ struct Stg_Envelopes_Params : StgParams {
 
   // Struct constructors.
   Stg_Envelopes_Params(EnvelopesParams &_iparams, StgParams &_sparams)
-      : iparams(indi_env_defaults, _iparams.tf), sparams(stg_env_defaults) {
+      : iparams(indi_env_defaults, _iparams.tf.GetTf()), sparams(stg_env_defaults) {
     iparams = _iparams;
     sparams = _sparams;
   }
