@@ -4,24 +4,23 @@
  */
 
 // User input params.
-INPUT string __Envelopes_Parameters__ = "-- Envelopes strategy params --";  // >>> ENVELOPES <<<
-INPUT float Envelopes_LotSize = 0;                                          // Lot size
-INPUT int Envelopes_SignalOpenMethod = 2;                                   // Signal open method (-127-127)
-INPUT float Envelopes_SignalOpenLevel = 0.0f;                               // Signal open level
-INPUT int Envelopes_SignalOpenFilterMethod = 32;                            // Signal open filter method
-INPUT int Envelopes_SignalOpenBoostMethod = 0;                              // Signal open filter method
-INPUT int Envelopes_SignalCloseMethod = 2;                                  // Signal close method (-127-127)
-INPUT float Envelopes_SignalCloseLevel = 0.0f;                              // Signal close level
-INPUT int Envelopes_PriceStopMethod = 1;                                    // Price stop method
-INPUT float Envelopes_PriceStopLevel = 0;                                   // Price stop level
-INPUT int Envelopes_TickFilterMethod = 1;                                   // Tick filter method
-INPUT float Envelopes_MaxSpread = 4.0;                                      // Max spread to trade (pips)
-INPUT short Envelopes_Shift = 0;                                            // Shift
-INPUT int Envelopes_OrderCloseTime = -20;  // Order close time in mins (>0) or bars (<0)
-INPUT string __Envelopes_Indi_Envelopes_Parameters__ =
-    "-- Envelopes strategy: Envelopes indicator params --";  // >>> Envelopes strategy: Envelopes indicator <<<
-INPUT int Envelopes_Indi_Envelopes_MA_Period = 14;           // Period
-INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;             // MA Shift
+INPUT_GROUP("Envelopes strategy: strategy params");
+INPUT float Envelopes_LotSize = 0;                // Lot size
+INPUT int Envelopes_SignalOpenMethod = 2;         // Signal open method (-127-127)
+INPUT float Envelopes_SignalOpenLevel = 0.0f;     // Signal open level
+INPUT int Envelopes_SignalOpenFilterMethod = 32;  // Signal open filter method
+INPUT int Envelopes_SignalOpenBoostMethod = 0;    // Signal open filter method
+INPUT int Envelopes_SignalCloseMethod = 2;        // Signal close method (-127-127)
+INPUT float Envelopes_SignalCloseLevel = 0.0f;    // Signal close level
+INPUT int Envelopes_PriceStopMethod = 1;          // Price stop method
+INPUT float Envelopes_PriceStopLevel = 0;         // Price stop level
+INPUT int Envelopes_TickFilterMethod = 1;         // Tick filter method
+INPUT float Envelopes_MaxSpread = 4.0;            // Max spread to trade (pips)
+INPUT short Envelopes_Shift = 0;                  // Shift
+INPUT int Envelopes_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
+INPUT_GROUP("Envelopes strategy: Envelopes indicator params");
+INPUT int Envelopes_Indi_Envelopes_MA_Period = 14;                                        // Period
+INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;                                          // MA Shift
 INPUT ENUM_MA_METHOD Envelopes_Indi_Envelopes_MA_Method = (ENUM_MA_METHOD)3;              // MA Method
 INPUT ENUM_APPLIED_PRICE Envelopes_Indi_Envelopes_Applied_Price = (ENUM_APPLIED_PRICE)3;  // Applied Price
 INPUT float Envelopes_Indi_Envelopes_Deviation = 0.5;                                     // Deviation for M1
