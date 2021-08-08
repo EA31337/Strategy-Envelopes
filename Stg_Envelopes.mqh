@@ -11,6 +11,7 @@ INPUT float Envelopes_SignalOpenLevel = 0.0f;     // Signal open level
 INPUT int Envelopes_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int Envelopes_SignalOpenBoostMethod = 0;    // Signal open filter method
 INPUT int Envelopes_SignalCloseMethod = 2;        // Signal close method (-127-127)
+INPUT int Envelopes_SignalCloseFilter = 0;        // Signal close filter (-127-127)
 INPUT float Envelopes_SignalCloseLevel = 0.0f;    // Signal close level
 INPUT int Envelopes_PriceStopMethod = 1;          // Price stop method
 INPUT float Envelopes_PriceStopLevel = 0;         // Price stop level
@@ -40,9 +41,9 @@ struct Indi_Envelopes_Params_Defaults : EnvelopesParams {
 struct Stg_Envelopes_Params_Defaults : StgParams {
   Stg_Envelopes_Params_Defaults()
       : StgParams(::Envelopes_SignalOpenMethod, ::Envelopes_SignalOpenFilterMethod, ::Envelopes_SignalOpenLevel,
-                  ::Envelopes_SignalOpenBoostMethod, ::Envelopes_SignalCloseMethod, ::Envelopes_SignalCloseLevel,
-                  ::Envelopes_PriceStopMethod, ::Envelopes_PriceStopLevel, ::Envelopes_TickFilterMethod,
-                  ::Envelopes_MaxSpread, ::Envelopes_Shift, ::Envelopes_OrderCloseTime) {}
+                  ::Envelopes_SignalOpenBoostMethod, ::Envelopes_SignalCloseMethod, ::Envelopes_SignalCloseFilter,
+                  ::Envelopes_SignalCloseLevel, ::Envelopes_PriceStopMethod, ::Envelopes_PriceStopLevel,
+                  ::Envelopes_TickFilterMethod, ::Envelopes_MaxSpread, ::Envelopes_Shift, ::Envelopes_OrderCloseTime) {}
 } stg_env_defaults;
 
 // Struct to define strategy parameters to override.
