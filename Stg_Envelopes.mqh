@@ -8,7 +8,7 @@ INPUT string __Envelopes_Parameters__ = "-- Envelopes strategy params --";  // >
 INPUT float Envelopes_LotSize = 0;                                          // Lot size
 INPUT int Envelopes_SignalOpenMethod = 2;                                   // Signal open method (-127-127)
 INPUT float Envelopes_SignalOpenLevel = 0.0f;                               // Signal open level
-INPUT int Envelopes_SignalOpenFilterMethod = 32;                             // Signal open filter method
+INPUT int Envelopes_SignalOpenFilterMethod = 32;                            // Signal open filter method
 INPUT int Envelopes_SignalOpenBoostMethod = 0;                              // Signal open filter method
 INPUT int Envelopes_SignalCloseMethod = 2;                                  // Signal close method (-127-127)
 INPUT float Envelopes_SignalCloseLevel = 0.0f;                              // Signal close level
@@ -99,8 +99,7 @@ class Stg_Envelopes : public Strategy {
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
     Chart *_chart = trade.GetChart();
     Indi_Envelopes *_indi = GetIndicator();
-    bool _is_valid = _indi[CURR].IsValid() && _indi[PREV].IsValid() && _indi[PPREV].IsValid();
-    bool _result = _is_valid;
+    bool _result = _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID);
     if (!_result) {
       // Returns false when indicator data is not valid.
       return false;
