@@ -18,6 +18,8 @@ INPUT float Envelopes_PriceStopLevel = 0;         // Price stop level
 INPUT int Envelopes_TickFilterMethod = 1;         // Tick filter method
 INPUT float Envelopes_MaxSpread = 4.0;            // Max spread to trade (pips)
 INPUT short Envelopes_Shift = 0;                  // Shift
+INPUT float Envelopes_OrderCloseLoss = 0;         // Order close loss
+INPUT float Envelopes_OrderCloseProfit = 0;       // Order close profit
 INPUT int Envelopes_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("Envelopes strategy: Envelopes indicator params");
 INPUT int Envelopes_Indi_Envelopes_MA_Period = 14;                                        // Period
@@ -43,7 +45,11 @@ struct Stg_Envelopes_Params_Defaults : StgParams {
       : StgParams(::Envelopes_SignalOpenMethod, ::Envelopes_SignalOpenFilterMethod, ::Envelopes_SignalOpenLevel,
                   ::Envelopes_SignalOpenBoostMethod, ::Envelopes_SignalCloseMethod, ::Envelopes_SignalCloseFilter,
                   ::Envelopes_SignalCloseLevel, ::Envelopes_PriceStopMethod, ::Envelopes_PriceStopLevel,
-                  ::Envelopes_TickFilterMethod, ::Envelopes_MaxSpread, ::Envelopes_Shift, ::Envelopes_OrderCloseTime) {}
+                  ::Envelopes_TickFilterMethod, ::Envelopes_MaxSpread, ::Envelopes_Shift) {
+    Set(STRAT_PARAM_OCL, Envelopes_OrderCloseLoss);
+    Set(STRAT_PARAM_OCP, Envelopes_OrderCloseProfit);
+    Set(STRAT_PARAM_OCT, Envelopes_OrderCloseTime);
+  }
 } stg_env_defaults;
 
 // Struct to define strategy parameters to override.
