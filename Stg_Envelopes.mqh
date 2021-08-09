@@ -9,6 +9,7 @@ INPUT float Envelopes_LotSize = 0;                // Lot size
 INPUT int Envelopes_SignalOpenMethod = 2;         // Signal open method (-127-127)
 INPUT float Envelopes_SignalOpenLevel = 0.0f;     // Signal open level
 INPUT int Envelopes_SignalOpenFilterMethod = 32;  // Signal open filter method
+INPUT int Envelopes_SignalOpenFilterTime = 6;     // Signal open filter time
 INPUT int Envelopes_SignalOpenBoostMethod = 0;    // Signal open filter method
 INPUT int Envelopes_SignalCloseMethod = 2;        // Signal close method (-127-127)
 INPUT int Envelopes_SignalCloseFilter = 0;        // Signal close filter (-127-127)
@@ -49,6 +50,7 @@ struct Stg_Envelopes_Params_Defaults : StgParams {
     Set(STRAT_PARAM_OCL, Envelopes_OrderCloseLoss);
     Set(STRAT_PARAM_OCP, Envelopes_OrderCloseProfit);
     Set(STRAT_PARAM_OCT, Envelopes_OrderCloseTime);
+    Set(STRAT_PARAM_SOFT, Envelopes_SignalOpenFilterTime);
   }
 } stg_env_defaults;
 
