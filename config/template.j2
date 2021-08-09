@@ -21,7 +21,7 @@ struct Stg_Envelopes_Params_{{ Timeframe }} : StgParams {
   Stg_Envelopes_Params_{{ Timeframe }}() : StgParams(stg_env_defaults) {
     lot_size = {{ Envelopes_LotSize | default(0) }};
     signal_open_method = {{ Envelopes_SignalOpenMethod | default(0) }};
-    signal_open_filter = {{ Envelopes_SignalOpenFilterMethod | default(1) }};
+    signal_open_filter_method = {{ Envelopes_SignalOpenFilterMethod | default(1) }};
     signal_open_level = (float){{ Envelopes_SignalOpenLevel | default(0) }};
     signal_open_boost = {{ Envelopes_SignalOpenBoostMethod | default(0) }};
     signal_close_method = {{ Envelopes_SignalCloseMethod | default(0) }};
