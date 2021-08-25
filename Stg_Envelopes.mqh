@@ -21,7 +21,7 @@ INPUT float Envelopes_MaxSpread = 4.0;            // Max spread to trade (pips)
 INPUT short Envelopes_Shift = 0;                  // Shift
 INPUT float Envelopes_OrderCloseLoss = 0;         // Order close loss
 INPUT float Envelopes_OrderCloseProfit = 0;       // Order close profit
-INPUT int Envelopes_OrderCloseTime = -20;         // Order close time in mins (>0) or bars (<0)
+INPUT int Envelopes_OrderCloseTime = -30;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("Envelopes strategy: Envelopes indicator params");
 INPUT int Envelopes_Indi_Envelopes_MA_Period = 22;                             // Period
 INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;                               // MA Shift
