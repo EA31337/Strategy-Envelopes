@@ -47,6 +47,7 @@ struct Stg_Envelopes_Params_Defaults : StgParams {
                   ::Envelopes_SignalOpenBoostMethod, ::Envelopes_SignalCloseMethod, ::Envelopes_SignalCloseFilter,
                   ::Envelopes_SignalCloseLevel, ::Envelopes_PriceStopMethod, ::Envelopes_PriceStopLevel,
                   ::Envelopes_TickFilterMethod, ::Envelopes_MaxSpread, ::Envelopes_Shift) {
+    Set(STRAT_PARAM_LS, Envelopes_LotSize);
     Set(STRAT_PARAM_OCL, Envelopes_OrderCloseLoss);
     Set(STRAT_PARAM_OCP, Envelopes_OrderCloseProfit);
     Set(STRAT_PARAM_OCT, Envelopes_OrderCloseTime);
