@@ -84,7 +84,6 @@ class Stg_Envelopes : public Strategy {
                              stg_env_h8);
 #endif
     // Initialize indicator.
-    EnvelopesParams env_params(_indi_params);
     _stg_params.SetIndicator(new Indi_Envelopes(_indi_params));
     // Initialize Strategy instance.
     ChartParams _cparams(_tf, _Symbol);
