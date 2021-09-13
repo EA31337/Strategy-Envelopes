@@ -38,7 +38,7 @@ struct Indi_Envelopes_Params_Defaults : EnvelopesParams {
       : EnvelopesParams(::Envelopes_Indi_Envelopes_MA_Period, ::Envelopes_Indi_Envelopes_MA_Shift,
                         ::Envelopes_Indi_Envelopes_MA_Method, ::Envelopes_Indi_Envelopes_Applied_Price,
                         ::Envelopes_Indi_Envelopes_Deviation, ::Envelopes_Indi_Envelopes_Shift) {}
-} indi_env_defaults;
+};
 
 // Defines struct with default user strategy values.
 struct Stg_Envelopes_Params_Defaults : StgParams {
@@ -53,7 +53,7 @@ struct Stg_Envelopes_Params_Defaults : StgParams {
     Set(STRAT_PARAM_OCT, Envelopes_OrderCloseTime);
     Set(STRAT_PARAM_SOFT, Envelopes_SignalOpenFilterTime);
   }
-} stg_env_defaults;
+};
 
 #ifdef __config__
 // Loads pair specific param values.
@@ -73,7 +73,9 @@ class Stg_Envelopes : public Strategy {
 
   static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
+    Indi_Envelopes_Params_Defaults indi_env_defaults;
     EnvelopesParams _indi_params(indi_env_defaults, _tf);
+    Stg_Envelopes_Params_Defaults stg_env_defaults;
     StgParams _stg_params(stg_env_defaults);
 #ifdef __config__
     SetParamsByTf<EnvelopesParams>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30, indi_env_h1,
