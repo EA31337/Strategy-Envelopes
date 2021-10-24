@@ -33,11 +33,11 @@ INPUT int Envelopes_Indi_Envelopes_Shift = 0;                                  /
 // Structs.
 
 // Defines struct with default user indicator values.
-struct Indi_Envelopes_Params_Defaults : EnvelopesParams {
+struct Indi_Envelopes_Params_Defaults : IndiEnvelopesParams {
   Indi_Envelopes_Params_Defaults()
-      : EnvelopesParams(::Envelopes_Indi_Envelopes_MA_Period, ::Envelopes_Indi_Envelopes_MA_Shift,
-                        ::Envelopes_Indi_Envelopes_MA_Method, ::Envelopes_Indi_Envelopes_Applied_Price,
-                        ::Envelopes_Indi_Envelopes_Deviation, ::Envelopes_Indi_Envelopes_Shift) {}
+      : IndiEnvelopesParams(::Envelopes_Indi_Envelopes_MA_Period, ::Envelopes_Indi_Envelopes_MA_Shift,
+                            ::Envelopes_Indi_Envelopes_MA_Method, ::Envelopes_Indi_Envelopes_Applied_Price,
+                            ::Envelopes_Indi_Envelopes_Deviation, ::Envelopes_Indi_Envelopes_Shift) {}
 };
 
 // Defines struct with default user strategy values.
@@ -74,12 +74,12 @@ class Stg_Envelopes : public Strategy {
   static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
     Indi_Envelopes_Params_Defaults indi_env_defaults;
-    EnvelopesParams _indi_params(indi_env_defaults, _tf);
+    IndiEnvelopesParams _indi_params(indi_env_defaults, _tf);
     Stg_Envelopes_Params_Defaults stg_env_defaults;
     StgParams _stg_params(stg_env_defaults);
 #ifdef __config__
-    SetParamsByTf<EnvelopesParams>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30, indi_env_h1,
-                                   indi_env_h4, indi_env_h8);
+    SetParamsByTf<IndiEnvelopesParams>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30,
+                                       indi_env_h1, indi_env_h4, indi_env_h8);
     SetParamsByTf<StgParams>(_stg_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1, stg_env_h4,
                              stg_env_h8);
 #endif
