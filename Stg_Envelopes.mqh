@@ -73,13 +73,9 @@ class Stg_Envelopes : public Strategy {
 
   static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL) {
     // Initialize strategy initial values.
-    Indi_Envelopes_Params_Defaults indi_env_defaults;
-    IndiEnvelopesParams _indi_params(indi_env_defaults, _tf);
     Stg_Envelopes_Params_Defaults stg_env_defaults;
     StgParams _stg_params(stg_env_defaults);
 #ifdef __config__
-    SetParamsByTf<IndiEnvelopesParams>(_indi_params, _tf, indi_env_m1, indi_env_m5, indi_env_m15, indi_env_m30,
-                                       indi_env_h1, indi_env_h4, indi_env_h8);
     SetParamsByTf<StgParams>(_stg_params, _tf, stg_env_m1, stg_env_m5, stg_env_m15, stg_env_m30, stg_env_h1, stg_env_h4,
                              stg_env_h8);
 #endif
@@ -88,8 +84,16 @@ class Stg_Envelopes : public Strategy {
     ChartParams _cparams(_tf, _Symbol);
     TradeParams _tparams;
     Strategy *_strat = new Stg_Envelopes(_stg_params, _tparams, _cparams, "Envelopes");
-    _strat.SetIndicator(new Indi_Envelopes(_indi_params));
     return _strat;
+  }
+
+  /**
+   * Event on strategy's init.
+   */
+  void OnInit() {
+    Indi_Envelopes_Params_Defaults indi_env_defaults;
+    IndiEnvelopesParams _indi_params(indi_env_defaults, Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
+    SetIndicator(new Indi_Envelopes(_indi_params));
   }
 
   /**
