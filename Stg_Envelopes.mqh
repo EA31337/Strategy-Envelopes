@@ -32,14 +32,6 @@ INPUT int Envelopes_Indi_Envelopes_Shift = 0;                                  /
 
 // Structs.
 
-// Defines struct with default user indicator values.
-struct Indi_Envelopes_Params_Defaults : IndiEnvelopesParams {
-  Indi_Envelopes_Params_Defaults()
-      : IndiEnvelopesParams(::Envelopes_Indi_Envelopes_MA_Period, ::Envelopes_Indi_Envelopes_MA_Shift,
-                            ::Envelopes_Indi_Envelopes_MA_Method, ::Envelopes_Indi_Envelopes_Applied_Price,
-                            ::Envelopes_Indi_Envelopes_Deviation, ::Envelopes_Indi_Envelopes_Shift) {}
-};
-
 // Defines struct with default user strategy values.
 struct Stg_Envelopes_Params_Defaults : StgParams {
   Stg_Envelopes_Params_Defaults()
@@ -91,8 +83,10 @@ class Stg_Envelopes : public Strategy {
    * Event on strategy's init.
    */
   void OnInit() {
-    Indi_Envelopes_Params_Defaults indi_env_defaults;
-    IndiEnvelopesParams _indi_params(indi_env_defaults, Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
+    IndiEnvelopesParams _indi_params(::Envelopes_Indi_Envelopes_MA_Period, ::Envelopes_Indi_Envelopes_MA_Shift,
+                                     ::Envelopes_Indi_Envelopes_MA_Method, ::Envelopes_Indi_Envelopes_Applied_Price,
+                                     ::Envelopes_Indi_Envelopes_Deviation, ::Envelopes_Indi_Envelopes_Shift);
+    _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
     SetIndicator(new Indi_Envelopes(_indi_params));
   }
 
