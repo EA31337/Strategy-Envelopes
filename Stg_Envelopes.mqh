@@ -110,7 +110,7 @@ class Stg_Envelopes : public Strategy {
         double lowest_price = fmin3(_chart.GetLow(_shift), _chart.GetLow(_shift + 1), _chart.GetLow(_shift + 2));
         _result = (lowest_price < fmax3(_indi[_shift][(int)LINE_LOWER], _indi[_shift + 1][(int)LINE_LOWER],
                                         _indi[_shift + 2][(int)LINE_LOWER]));
-        _result &= _indi.IsIncByPct(_level, 0, 0, 3);
+        _result &= _indi.IsIncByPct(_level, 0, _shift, 3);
         _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
         break;
       }
@@ -120,7 +120,7 @@ class Stg_Envelopes : public Strategy {
         double highest_price = fmin3(_chart.GetHigh(_shift), _chart.GetHigh(_shift + 1), _chart.GetHigh(_shift + 2));
         _result = (highest_price > fmin3(_indi[_shift][(int)LINE_UPPER], _indi[_shift + 1][(int)LINE_UPPER],
                                          _indi[_shift + 2][(int)LINE_UPPER]));
-        _result &= _indi.IsDecByPct(-_level, 0, 0, 3);
+        _result &= _indi.IsDecByPct(-_level, 0, _shift, 3);
         _result &= _method > 0 ? _signals.CheckSignals(_method) : _signals.CheckSignalsAll(-_method);
         break;
       }
