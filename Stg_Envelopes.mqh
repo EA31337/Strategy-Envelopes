@@ -6,7 +6,7 @@
 // User input params.
 INPUT_GROUP("Envelopes strategy: strategy params");
 INPUT float Envelopes_LotSize = 0;                // Lot size
-INPUT int Envelopes_SignalOpenMethod = 32;        // Signal open method (-127-127)
+INPUT int Envelopes_SignalOpenMethod = 0;         // Signal open method (-127-127)
 INPUT float Envelopes_SignalOpenLevel = 0.001f;   // Signal open level
 INPUT int Envelopes_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int Envelopes_SignalOpenFilterTime = 3;     // Signal open filter time
