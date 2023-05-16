@@ -27,7 +27,7 @@ INPUT int Envelopes_Indi_Envelopes_MA_Period = 20;                             /
 INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;                               // MA Shift
 INPUT ENUM_MA_METHOD Envelopes_Indi_Envelopes_MA_Method = (ENUM_MA_METHOD)1;   // MA Method
 INPUT ENUM_APPLIED_PRICE Envelopes_Indi_Envelopes_Applied_Price = PRICE_OPEN;  // Applied Price
-INPUT float Envelopes_Indi_Envelopes_Deviation = 0.1f;                        // Deviation
+INPUT float Envelopes_Indi_Envelopes_Deviation = 0.1f;                         // Deviation
 INPUT int Envelopes_Indi_Envelopes_Shift = 0;                                  // Shift
 
 // Structs.
