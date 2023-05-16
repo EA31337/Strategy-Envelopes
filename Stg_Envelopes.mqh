@@ -23,11 +23,11 @@ INPUT float Envelopes_OrderCloseLoss = 80;        // Order close loss
 INPUT float Envelopes_OrderCloseProfit = 80;      // Order close profit
 INPUT int Envelopes_OrderCloseTime = -30;         // Order close time in mins (>0) or bars (<0)
 INPUT_GROUP("Envelopes strategy: Envelopes indicator params");
-INPUT int Envelopes_Indi_Envelopes_MA_Period = 22;                             // Period
+INPUT int Envelopes_Indi_Envelopes_MA_Period = 20;                             // Period
 INPUT int Envelopes_Indi_Envelopes_MA_Shift = 0;                               // MA Shift
-INPUT ENUM_MA_METHOD Envelopes_Indi_Envelopes_MA_Method = (ENUM_MA_METHOD)2;   // MA Method
+INPUT ENUM_MA_METHOD Envelopes_Indi_Envelopes_MA_Method = (ENUM_MA_METHOD)1;   // MA Method
 INPUT ENUM_APPLIED_PRICE Envelopes_Indi_Envelopes_Applied_Price = PRICE_OPEN;  // Applied Price
-INPUT float Envelopes_Indi_Envelopes_Deviation = 0.2f;                         // Deviation
+INPUT float Envelopes_Indi_Envelopes_Deviation = 0.1f;                        // Deviation
 INPUT int Envelopes_Indi_Envelopes_Shift = 0;                                  // Shift
 
 // Structs.
