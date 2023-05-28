@@ -63,7 +63,7 @@ class Stg_Envelopes : public Strategy {
   Stg_Envelopes(StgParams &_sparams, TradeParams &_tparams, ChartParams &_cparams, string _name = "")
       : Strategy(_sparams, _tparams, _cparams, _name) {}
 
-  static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL) {
+  static Stg_Envelopes *Init(ENUM_TIMEFRAMES _tf = NULL, EA* _ea = NULL) {
     // Initialize strategy initial values.
     Stg_Envelopes_Params_Defaults stg_env_defaults;
     StgParams _stg_params(stg_env_defaults);
