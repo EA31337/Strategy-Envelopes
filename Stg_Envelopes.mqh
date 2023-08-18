@@ -118,7 +118,7 @@ class Stg_Envelopes : public Strategy {
       // Sell: price crossed lower line in the last 3 bars.
       case ORDER_TYPE_SELL: {
         // Price value was higher than the upper LINE.
-        double highest_price = fmin3(_chart.GetHigh(_ishift), _chart.GetHigh(_ishift + 1), _chart.GetHigh(_ishift + 2));
+        double highest_price = fmax3(_chart.GetHigh(_ishift), _chart.GetHigh(_ishift + 1), _chart.GetHigh(_ishift + 2));
         _result = (highest_price > fmin3(_indi[_ishift][(int)LINE_UPPER], _indi[_ishift + 1][(int)LINE_UPPER],
                                          _indi[_ishift + 2][(int)LINE_UPPER]));
         _result &= _indi.IsDecByPct(-_level, (int)LINE_UPPER, _ishift, 3);
