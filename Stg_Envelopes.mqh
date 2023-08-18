@@ -7,13 +7,13 @@
 INPUT_GROUP("Envelopes strategy: strategy params");
 INPUT float Envelopes_LotSize = 0;                // Lot size
 INPUT int Envelopes_SignalOpenMethod = 0;         // Signal open method (-127-127)
-INPUT float Envelopes_SignalOpenLevel = 0.001f;   // Signal open level
+INPUT float Envelopes_SignalOpenLevel = 0.0f;     // Signal open level
 INPUT int Envelopes_SignalOpenFilterMethod = 32;  // Signal open filter method
 INPUT int Envelopes_SignalOpenFilterTime = 3;     // Signal open filter time
 INPUT int Envelopes_SignalOpenBoostMethod = 0;    // Signal open boost method
 INPUT int Envelopes_SignalCloseMethod = 0;        // Signal close method (-127-127)
 INPUT int Envelopes_SignalCloseFilter = 0;        // Signal close filter (-127-127)
-INPUT float Envelopes_SignalCloseLevel = 0.001f;  // Signal close level
+INPUT float Envelopes_SignalCloseLevel = 0.0f;    // Signal close level
 INPUT int Envelopes_PriceStopMethod = 1;          // Price stop method (0-127)
 INPUT float Envelopes_PriceStopLevel = 2;         // Price stop level
 INPUT int Envelopes_TickFilterMethod = 32;        // Tick filter method
